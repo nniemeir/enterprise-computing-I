@@ -1,8 +1,0 @@
----
-- name: Ansible Server
-  hosts: localhost
-  connection: local
-  become: yes
-  roles: 
-    - Ansible Server SSH
-    - Ansible Server Security

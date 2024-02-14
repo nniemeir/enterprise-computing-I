@@ -1,6 +1,0 @@
----
-- name: FreeIPA Server
-  hosts: localhost
-  become: yes
-  roles: 
-    - Security

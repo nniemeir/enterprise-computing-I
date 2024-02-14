@@ -1,8 +1,0 @@
----
-- name: Developer Workstations
-  hosts: Workstations
-  become: yes
-  roles: 
-    - Development Workstation SSH
-    - Development Workstation Toolkit
-    - Development Workstation Security
