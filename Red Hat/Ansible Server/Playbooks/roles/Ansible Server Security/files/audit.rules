@@ -1,0 +1,130 @@
+# Monitor etc directory
+-w /etc -k etc -p rx
+
+# Monitor user/group information files
+-w /etc/passwd -k ug_info -p wa
+-w /etc/group -k ug_info -p rwa
+-w /etc/shadow -k ug_info -p rwa
+-w /etc/gshadow -k ug_info -p wa
+-w /etc/security/opasswd -p wa 
+
+# Monitor service port assignments
+-w /etc/services -k serv_ports -p wa
+
+# Monitor use and configuration of at 
+-w /var/spool/atspool -k at
+-w /etc/at.allow -k at
+-w /etc/at.deny -k at
+
+# Monitor changes to cron
+-w /etc/cron.allow -k cron -p wa
+-w /etc/cron.deny -k cron -p wa
+-w /etc/cron.d/ -k cron -p wa
+-w /etc/cron.daily/ -k cron -p wa
+-w /etc/cron.hourly/ -k cron -p wa
+-w /etc/cron.monthly/ -k cron -p wa
+-w /etc/cron.weekly/ -k cron -p wa
+-w /etc/crontab -k cron -p wa
+-w /var/spool/cron/root -k cron -p wa 
+
+# Monitor shadow-utils configs
+-w /etc/login.defs -k shadow_configs -p wa
+
+# Monitor changes to which ttys can login as root
+-w /etc/securetty -p wa
+
+# Monitor logins
+-w /var/log/lastlog -p wa
+
+# Monitor changes to DNS hosts file
+-w /etc/hosts -p wa
+
+# Monitor changes to sysconfig
+-w /etc/sysconfig/
+
+# Monitor changes to service scripts dir
+-w /etc/init.d/
+
+# Monitor changes to dynamic library paths
+-w /etc/ld.so.conf -p wa
+
+# Monitor changes to kernel parameters
+-w /etc/sysctl.conf -p wa
+
+# Monitor changes to modprobe configs
+-w /etc/modprobe.d/
+-w /etc/modprobe.conf.local -p wa
+-w /etc/modprobe.conf -p wa
+
+# Monitor changes to PAM configs
+-w /etc/pam.d/
+-w /etc/pam.conf 
+
+# Monitor changes to SSHD config
+-w /etc/ssh/sshd_config
+
+# Monitor attempts to change hostname
+-a always,exit -F arch=b32 -S sethostname
+-a always,exit -F arch=b64 -S sethostname
+
+# Monitor changes to issue
+-w /etc/issue -p wa
+-w /etc/issue.net -p wa
+
+# Monitor changes to login banner
+-w /etc/motd -p wa
+
+# Monitor changing of default permissions
+-a always,exit -F arch=b32 -S umask
+-a always,exit -F arch=b64 -S umask
+
+# Monitor audit logs
+-w /var/log/audit -k audit_logs -p wa
+
+## Monitor actions that could change system time
+-a always,exit -F arch=b32 -S adjtimex,settimeofday,stime -F key=time-change
+-a always,exit -F arch=b64 -S adjtimex,settimeofday -F key=time-change
+-a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -F key=time-change
+-a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -F key=time-change
+-w /etc/localtime -p wa -k time-change
+
+# Monitor actions that could change system locale (Copied from NISPOM rules in documentation)
+-a always,exit -F arch=b32 -S sethostname,setdomainname -F key=system-locale
+-a always,exit -F arch=b64 -S sethostname,setdomainname -F key=system-locale
+-w /etc/issue -p wa -k system-locale
+-w /etc/issue.net -p wa -k system-locale
+-w /etc/hosts -p wa -k system-locale
+-w /etc/hostname -p wa -k system-locale
+-w /etc/sysconfig/network -p wa -k system-locale
+-a always,exit -F dir=/etc/NetworkManager/ -F perm=wa -F key=system-locale
+
+# Monitor privilege elevation (Copied from PCI DSS rules in documentation)
+-a always,exit -F arch=b64 -S setuid -F a0=0 -F exe=/usr/bin/su -F key=10.2.5.b-elevated-privs-session
+-a always,exit -F arch=b32 -S setuid -F a0=0 -F exe=/usr/bin/su -F key=10.2.5.b-elevated-privs-session
+-a always,exit -F arch=b64 -S setresuid -F a0=0 -F exe=/usr/bin/sudo -F key=10.2.5.b-elevated-privs-session
+-a always,exit -F arch=b32 -S setresuid -F a0=0 -F exe=/usr/bin/sudo -F key=10.2.5.b-elevated-privs-session
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=10.2.5.b-elevated-privs-setuid
+-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F key=10.2.5.b-elevated-privs-setuid
+
+# Monitor unsuccessful deletions (Copied from NISPOM rules in documentation)
+-a always,exit -F arch=b32 -S unlink,rmdir,unlinkat -F exit=-EACCES -F key=delete
+-a always,exit -F arch=b64 -S rmdir,unlink,unlinkat -F exit=-EACCES -F key=delete
+-a always,exit -F arch=b32 -S unlink,rmdir,unlinkat -F exit=-EPERM -F key=delete
+-a always,exit -F arch=b64 -S rmdir,unlink,unlinkat -F exit=-EPERM -F key=delete
+
+# Monitor unsuccessful modifications (Copied from NISPOM rules in documentation)
+-a always,exit -F arch=b32 -S rename -S renameat -S truncate -S chmod -S setxattr -S lsetxattr -S removexattr -S lremovexattr -F exit=-EACCES -F key=mods
+-a always,exit -F arch=b64 -S rename -S renameat -S truncate -S chmod -S setxattr -S lsetxattr -S removexattr -S lremovexattr -F exit=-EACCES -F key=mods
+-a always,exit -F arch=b32 -S rename -S renameat -S truncate -S chmod -S setxattr -S lsetxattr -S removexattr -S lremovexattr -F exit=-EPERM -F key=mods
+-a always,exit -F arch=b64 -S rename -S renameat -S truncate -S chmod -S setxattr -S lsetxattr -S removexattr -S lremovexattr -F exit=-EPERM -F key=mods
+
+# Monitor unsuccessful creation (Copied from NISPOM rules in documentation)
+-a always,exit -F arch=b32 -S creat,link,mknod,mkdir,symlink,mknodat,linkat,symlinkat -F exit=-EACCES -F key=creation
+-a always,exit -F arch=b64 -S mkdir,creat,link,symlink,mknod,mknodat,linkat,symlinkat -F exit=-EACCES -F key=creation
+-a always,exit -F arch=b32 -S link,mkdir,symlink,mkdirat -F exit=-EPERM -F key=creation
+-a always,exit -F arch=b64 -S mkdir,link,symlink,mkdirat -F exit=-EPERM -F key=creation
+
+# Monitor superuser looking in other home directories (Copied from documentation)
+-a always,exit -F dir=/home -F uid=0 -F auid>=1000 -F auid!=unset -C auid!=obj_uid -F key=power-abuse
+
+

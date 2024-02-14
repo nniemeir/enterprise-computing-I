@@ -1,0 +1,11 @@
+---
+- name: Push Updates
+  hosts: |
+    localhost
+    Workstations
+  become: yes
+  tasks:
+    - name: Update system
+      dnf:
+        name: "*"
+        state: latest
