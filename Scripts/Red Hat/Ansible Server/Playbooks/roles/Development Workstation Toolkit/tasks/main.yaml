@@ -1,0 +1,28 @@
+- name: Import VS Code GPG Key
+  rpm_key:
+    state: present
+    key: https://packages.microsoft.com/keys/microsoft.asc
+
+- name: Add VSCode Yum repository
+  yum_repository:
+    name: vscode
+    baseurl: https://packages.microsoft.com/yumrepos/vscode
+    description: "None"
+    enabled: true
+    gpgcheck: true
+    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+
+- name: Install Some Common Developer Packages
+  dnf:
+    state: present
+    name:
+      - code
+      - neovim
+      - pandoc
+      - texlive-scheme-full
+
+- name: Install Firefox Extensions
+  shell: |
+    mkdir /usr/lib64/firefox/distribution/extensions
+    wget -O /usr/lib64/firefox/distribution/extensions/uBlock0@raymondhill.net.xpi "https://addons.mozilla.org/firefox/downloads/file/4171020/ublock_origin-1.52.2.xpi"
+    wget -O /usr/lib64/firefox/distribution/extensions/{c3c10168-4186-445c-9c5b-63f12b8e2c87}.xpi "https://addons.mozilla.org/firefox/downloads/file/4170787/cookie_editor-1.12.0.xpi"
