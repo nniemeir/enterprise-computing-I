@@ -1,5 +1,3 @@
-# Enterprise Computing I
+### Deploying & Securing Enterprise Networks: Windows & Red Hat Ecosystems  
 
-![Linux Subnet Diagram](Documentation/Linux_Subnet.png)
-
-![Windows Subnet Diagram](Documentation/Windows_Subnet.png)
+I am currently editing this project's documentation to be more succint, as the requirements of the course it was undertaken for led me to go a bit overboard in terms of length. 
