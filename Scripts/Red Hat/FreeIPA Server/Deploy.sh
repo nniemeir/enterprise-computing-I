@@ -115,10 +115,10 @@ ipa sudorule-add-host desktop_admins_sudo --hosts=conductor --hostgroup=develope
 # Apply rule to desktop admins
 ipa sudorule-add-user desktop_admins_sudo --groups=desktop_admins
 
-# Disable Allow All HBAC Rule
+# Disable Allow All HBAC rule
 ipa hbacrule-disable allow_all
 
-# Create HBAC rule for Desktop Admins
+# Create HBAC rule for desktop admins
 ipa hbacrule-add desktop_admins_access
 
 # Apply rule to desktop admins
@@ -130,10 +130,10 @@ ipa hbacrule-add-host desktop_admins_access --hostgroups="developer_workstations
 # Include non-FreeIPA servers in rule
 ipa hbacrule-add-host desktop_admins_access --hostgroups="non-freeipa_servers"
 
-# Apply to all services
+# Apply rule to all services
 ipa hbacrule-mod desktop_admins_access --servicecat=all
 
-# Create HBAC rule for Developers
+# Create HBAC rule for developers
 ipa hbacrule-add developers_access
 
 # Apply rule to developers

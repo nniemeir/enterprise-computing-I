@@ -8,7 +8,7 @@ New-NetIPAddress `
 # Set DNS
 Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses 173.16.16.2
 
-# Set Hostname
+# Set hostname
 Rename-Computer -NewName "passenger01" -Force -PassThru
 
 # Apply network configuration changes

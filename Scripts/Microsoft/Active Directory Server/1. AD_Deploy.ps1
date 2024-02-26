@@ -5,7 +5,7 @@ New-NetIPAddress `
     -PrefixLength 24 `
     -DefaultGateway 173.16.16.1
 
-# Set DNS Server to Cloudflare
+# Set DNS server to Cloudflare
 Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses 1.1.1.1
 
 # Set hostname

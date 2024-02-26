@@ -47,7 +47,7 @@ sudo firewall-cmd --permanent --add-service=dns --permanent
 # Install FreeIPA-client
 sudo dnf install freeipa-server freeipa-server-dns -y
 
-# Enable freeipa services in firewalld
+# Enable FreeIPA services in firewalld
 sudo firewall-cmd --add-service=freeipa-ldap --add-service=freeipa-ldaps --permanent
 
 # Reload firewalld

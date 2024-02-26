@@ -10,7 +10,7 @@ sudo nmcli connection modify "Wired connection 1" ipv4.addresses "$NEW_IP"
 # Disable DHCP
 sudo nmcli connection modify "Wired connection 1" ipv4.method manual
 
-# Set Hostname
+# Set hostname
 sudo hostnamectl set-hostname "$NEW_HOSTNAME"
 
 # Add hostname to /etc/hosts
@@ -19,7 +19,7 @@ echo "$NEW_IP    $NEW_HOSTNAME" | sudo tee -a /etc/hosts
 # Set DNS to Cloudflare
 sudo nmcli connection modify "Wired connection 1" ipv4.dns "1.1.1.1"
 
-# Set Gateway
+# Set gateway
 sudo nmcli connection modify "Wired connection 1" ipv4.gateway "$NEW_GATEWAY"
 
 # Restart networking services
@@ -42,5 +42,5 @@ sudo systemctl restart NetworkManager
 # The user would change their DNS server to the FreeIPA server after registering Nessus
 read -p "Press Enter to continue after configuring Nessus"
 
-# Set DNS to FreeIPA Server
+# Set DNS to FreeIPA server
 sudo nmcli connection modify "Wired connection 1" ipv4.dns "$NEW_DNS"

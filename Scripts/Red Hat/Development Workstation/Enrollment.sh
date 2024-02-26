@@ -12,7 +12,7 @@ sudo nmcli connection modify "Wired connection 1" ipv4.method manual
 # Set IP Address
 sudo nmcli connection modify "Wired connection 1" ipv4.addresses "$NEW_IP"
 
-# Set Hostname
+# Set hostname
 sudo hostnamectl set-hostname "$NEW_HOSTNAME"
 
 # Add hostname to /etc/hosts
@@ -24,7 +24,7 @@ echo "$NEW_DNS    $SERVER_HOSTNAME" | sudo tee -a /etc/hosts
 # Set DNS to Cloudflare
 sudo nmcli connection modify "Wired connection 1" ipv4.dns "1.1.1.1"
 
-# Set Gateway
+# Set gateway
 sudo nmcli connection modify "Wired connection 1" ipv4.gateway "$NEW_GATEWAY"
 
 # Restart networking services
@@ -36,13 +36,13 @@ sudo dnf install python3-pip -y
 # Install OpenSSH Server
 sudo dnf install openssh-server -y
 
-# Enable sshd service
+# Enable SSHD service
 sudo systemctl enable sshd.service
 
 # Install FreeIPA-client
 sudo dnf install freeipa-client
 
-# Enable freeipa services in firewalld
+# Enable FreeIPA services in firewalld
 sudo firewall-cmd --add-service=freeipa-ldap --add-service=freeipa-ldaps --add-service=dns --add-service=ssh --permanent
 
 # Reload firewalld
@@ -68,7 +68,7 @@ sudo systemctl restart NetworkManager
 # Enroll device as FreeIPA client
 sudo ipa-client-install --domain="$DOMAIN" --hostname="$NEW_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$SERVER_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
 
-# Procure Kerberos Ticket
+# Procure Kerberos ticket
 kinit aperkins
 
 # Reboot 

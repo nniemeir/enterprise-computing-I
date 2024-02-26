@@ -11,16 +11,16 @@ DOMAIN=universalnoodles.lan
 # Disable DHCP
 sudo nmcli connection modify "$NIC" ipv4.method manual
 
-# Set Hostname
+# Set hostname
 sudo hostnamectl set-hostname "$NEW_HOSTNAME"
 
-# Set IP Address
+# Set IP address
 sudo nmcli connection modify "$NIC" ipv4.addresses "$NEW_IP"
 
 # Set DNS to Cloudflare
 sudo nmcli connection modify "$NIC" ipv4.dns "1.1.1.1"
 
-# Set Gateway
+# Set gateway
 sudo nmcli connection modify "$NIC" ipv4.gateway "$NEW_GATEWAY"
 
 # Restart networking services
@@ -41,7 +41,7 @@ sudo dnf install python3-pip -y
 # Install FreeIPA-client
 sudo dnf install freeipa-client -y
 
-# Enable freeipa services in firewalld
+# Enable FreeIPA services in firewalld
 sudo firewall-cmd --add-service=freeipa-ldap --add-service=freeipa-ldaps --add-service=dns --add-service=ssh --permanent
 
 # Reload firewalld
@@ -58,7 +58,7 @@ while true; do
 	fi
 done
 
-# Set DNS to FreeIPA Server
+# Set DNS to FreeIPA server
 sudo nmcli connection modify "$NIC" ipv4.dns "$NEW_DNS"
 
 # Restart networking services

@@ -10,7 +10,7 @@ rm ".\policies\" -r -force
 rm ".\policy_templates.zip" -force
 
 # Firefox ADMX templates are installed on development workstation in the Dev_Toolkit script
-
+ 
 # Import GPO Backups
 $GPOLocation = "C:\Users\Administrator\Project Files\Group Policy\GPO"
 Import-GPO -BackupID "FCEAB0DA-7ACA-46AB-8845-5EE6AA969FD8" -Path $GPOLocation -TargetName "Default Domain Policy" -CreateIfNeeded
