@@ -55,5 +55,5 @@ if(!(Test-Path -Path $pandocdir)) {
     [Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Pandoc", "Machine")
 }
 
-#Lastly, delete the temporary directory
+# Delete the temporary directory
 rm $workdir -r -force
