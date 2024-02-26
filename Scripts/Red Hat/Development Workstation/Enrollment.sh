@@ -36,7 +36,7 @@ sudo dnf install python3-pip -y
 # Install OpenSSH Server
 sudo dnf install openssh-server -y
 
-# We enable sshd service
+# Enable sshd service
 sudo systemctl enable sshd.service
 
 # Install FreeIPA-client
@@ -65,10 +65,10 @@ sudo nmcli connection modify "Wired connection 1" ipv4.dns "$NEW_DNS"
 # Restart networking services
 sudo systemctl restart NetworkManager
 
-# We deploy FreeIPA
+# Enroll device as FreeIPA client
 sudo ipa-client-install --domain="$DOMAIN" --hostname="$NEW_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$SERVER_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
 
-#Procure Kerberos Ticket
+# Procure Kerberos Ticket
 kinit aperkins
 
 # Reboot 
