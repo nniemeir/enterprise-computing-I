@@ -33,7 +33,7 @@ Red Hat. (2022, March 18). Is any virus protection software needed for Red Hat E
 
 Red Hat. (2022). Security hardening red hat enterprise Linux 9. Red Hat Customer Portal. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/security_hardening/index
 
-Mozilla Firefox
+## Mozilla Firefox
 
 Mozilla. (n.d.). Customizing Firefox Using Group Policy (windows). Firefox for Enterprise Help. https://support.mozilla.org/en-US/kb/customizing-firefox-using-group-policy-windows 	
 
