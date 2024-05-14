@@ -1,36 +1,34 @@
 #!/bin/bash
-NIC=enp0s3
-NEW_GATEWAY=172.16.16.1
-NEW_DNS=172.16.16.2
-NEW_IP=172.16.16.3
-NEW_HOSTNAME=conductor.universalnoodles.lan
-REALM=UNIVERSALNOODLES.LAN 
-SERVER_HOSTNAME=station.universalnoodles.lan
-DOMAIN=universalnoodles.lan
+
+# Ensure configuration file is present
+source preferences.conf || {
+	echo "Error: No configuration file found."
+	exit 1
+}
 
 # Disable DHCP
-sudo nmcli connection modify "$NIC" ipv4.method manual
+sudo nmcli connection modify "$ANSIBLE_NIC" ipv4.method manual
 
 # Set hostname
-sudo hostnamectl set-hostname "$NEW_HOSTNAME"
+sudo hostnamectl set-hostname "$ANSIBLE_HOSTNAME"
 
 # Set IP address
-sudo nmcli connection modify "$NIC" ipv4.addresses "$NEW_IP"
+sudo nmcli connection modify "$ANSIBLE_NIC" ipv4.addresses "$ANSIBLE_IP"
 
 # Set DNS to Cloudflare
-sudo nmcli connection modify "$NIC" ipv4.dns "1.1.1.1"
+sudo nmcli connection modify "$ANSIBLE_NIC" ipv4.dns "$CLOUDFLARE_IP"
 
 # Set gateway
-sudo nmcli connection modify "$NIC" ipv4.gateway "$NEW_GATEWAY"
+sudo nmcli connection modify "$ANSIBLE_NIC" ipv4.gateway "$PFSENSE_IP"
 
 # Restart networking services
 sudo systemctl restart NetworkManager
 
 # Add hostname to /etc/hosts
-echo "$NEW_IP    $NEW_HOSTNAME" | sudo tee -a /etc/hosts
+echo "$ANSIBLE_IP    $ANSIBLE_HOSTNAME" | sudo tee -a /etc/hosts
 
 # Add IPA server to /etc/hosts
-echo "$NEW_DNS    $SERVER_HOSTNAME" | sudo tee -a /etc/hosts
+echo "$FREEIPA_IP    $FREEIPA_HOSTNAME" | sudo tee -a /etc/hosts
 
 # Disable Cockpit
 sudo systemctl disable cockpit.socket
@@ -59,16 +57,16 @@ while true; do
 done
 
 # Set DNS to FreeIPA server
-sudo nmcli connection modify "$NIC" ipv4.dns "$NEW_DNS"
+sudo nmcli connection modify "$ANSIBLE_NIC" ipv4.dns "$FREEIPA_IP"
 
 # Restart networking services
 sudo systemctl restart NetworkManager
 
 # Enroll FreeIPA client
-sudo ipa-client-install --domain="$DOMAIN" --hostname="$NEW_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$SERVER_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
+sudo ipa-client-install --domain="$DOMAIN" --hostname="$ANSIBLE_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$FREEIPA_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
 
 #Procure Kerberos Ticket
-kinit aperkins
+kinit "$ENROLL_USER"
 
 # Reboot 
 sudo systemctl reboot

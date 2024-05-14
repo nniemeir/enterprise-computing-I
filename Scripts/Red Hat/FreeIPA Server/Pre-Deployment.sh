@@ -1,27 +1,28 @@
 #!/bin/bash
-NIC=enp0s3
-NEW_GATEWAY=172.16.16.1
-NEW_DNS=1.1.1.1
-NEW_IP=172.16.16.2
-NEW_HOSTNAME=station.universalnoodles.lan
+
+# Ensure configuration file is present
+source preferences.conf || {
+	echo "Error: No configuration file found."
+	exit 1
+}
 
 # Disable DHCP
-sudo nmcli connection modify "$NIC" ipv4.method manual
+sudo nmcli connection modify "$FREEIPA_NIC" ipv4.method manual
 
 # Set Hostname
-sudo hostnamectl set-hostname "$NEW_HOSTNAME"
+sudo hostnamectl set-hostname "$FREEIPA_HOSTNAME"
 
 # Set IP Address
-sudo nmcli connection modify "$NIC" ipv4.addresses "$NEW_IP"
+sudo nmcli connection modify "$FREEIPA_NIC" ipv4.addresses "$FREEIPA_NIC"
 
 # Set DNS
-sudo nmcli connection modify "$NIC" ipv4.dns "$NEW_DNS"
+sudo nmcli connection modify "$FREEIPA_NIC" ipv4.dns "$FREEIPA_DNS"
 
 # Set Gateway
-sudo nmcli connection modify "$NIC" ipv4.gateway "$NEW_GATEWAY"
+sudo nmcli connection modify "$FREEIPA_NIC" ipv4.gateway "$PFSENSE_IP"
 
 # Add hostname to /etc/hosts
-echo "$NEW_IP    $NEW_HOSTNAME" | sudo tee -a /etc/hosts
+echo "$FREEIPA_IP    $FREEIPA_HOSTNAME" | sudo tee -a /etc/hosts
 
 # Restart networking services
 sudo systemctl restart NetworkManager

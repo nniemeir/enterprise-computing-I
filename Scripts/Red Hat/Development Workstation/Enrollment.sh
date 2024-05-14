@@ -1,31 +1,31 @@
 #!/bin/bash
-NEW_DNS=172.16.16.2
-NEW_IP=172.16.16.4
-NEW_HOSTNAME=passenger01.universalnoodles.lan
-REALM=UNIVERSALNOODLES.LAN 
-SERVER_HOSTNAME=station.universalnoodles.lan
-DOMAIN=universalnoodles.lan
+
+# Ensure configuration file is present
+source preferences.conf || {
+	echo "Error: No configuration file found."
+	exit 1
+}
 
 # Disable DHCP
 sudo nmcli connection modify "Wired connection 1" ipv4.method manual
 
 # Set IP Address
-sudo nmcli connection modify "Wired connection 1" ipv4.addresses "$NEW_IP"
+sudo nmcli connection modify "Wired connection 1" ipv4.addresses "$DEV_IP"
 
 # Set hostname
-sudo hostnamectl set-hostname "$NEW_HOSTNAME"
+sudo hostnamectl set-hostname "$DEV_HOSTNAME"
 
 # Add hostname to /etc/hosts
-echo "$NEW_IP    $NEW_HOSTNAME" | sudo tee -a /etc/hosts
+echo "$DEV_IP    $DEV_HOSTNAME" | sudo tee -a /etc/hosts
 
 # Add IPA server to /etc/hosts
-echo "$NEW_DNS    $SERVER_HOSTNAME" | sudo tee -a /etc/hosts
+echo "$FREEIPA_IP    $FREEIPA_HOSTNAME" | sudo tee -a /etc/hosts
 
 # Set DNS to Cloudflare
-sudo nmcli connection modify "Wired connection 1" ipv4.dns "1.1.1.1"
+sudo nmcli connection modify "Wired connection 1" ipv4.dns "$CLOUDFLARE_IP"
 
 # Set gateway
-sudo nmcli connection modify "Wired connection 1" ipv4.gateway "$NEW_GATEWAY"
+sudo nmcli connection modify "Wired connection 1" ipv4.gateway "$PFSENSE_IP"
 
 # Restart networking services
 sudo systemctl restart NetworkManager
@@ -60,16 +60,16 @@ while true; do
 done
 
 # Set DNS
-sudo nmcli connection modify "Wired connection 1" ipv4.dns "$NEW_DNS"
+sudo nmcli connection modify "Wired connection 1" ipv4.dns "$FREEIPA_IP"
 
 # Restart networking services
 sudo systemctl restart NetworkManager
 
 # Enroll device as FreeIPA client
-sudo ipa-client-install --domain="$DOMAIN" --hostname="$NEW_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$SERVER_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
+sudo ipa-client-install --domain="$DOMAIN" --hostname="$DEV_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$FREEIPA_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
 
 # Procure Kerberos ticket
-kinit aperkins
+kinit "$ENROLL_USER"
 
 # Reboot 
 sudo systemctl reboot

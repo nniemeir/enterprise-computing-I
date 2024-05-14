@@ -1,26 +1,28 @@
 #!/bin/bash
-NEW_DNS=172.16.16.2
-NEW_GATEWAY=172.16.16.1
-NEW_IP=172.16.16.5
-NEW_HOSTNAME=parrot.universalnoodles.lan
+
+# Ensure configuration file is present
+source preferences.conf || {
+	echo "Error: No configuration file found."
+	exit 1
+}
 
 # Set IP Address
-sudo nmcli connection modify "Wired connection 1" ipv4.addresses "$NEW_IP"
+sudo nmcli connection modify "Wired connection 1" ipv4.addresses "$PARROT_IP"
 
 # Disable DHCP
 sudo nmcli connection modify "Wired connection 1" ipv4.method manual
 
 # Set hostname
-sudo hostnamectl set-hostname "$NEW_HOSTNAME"
+sudo hostnamectl set-hostname "$PARROT_HOSTNAME"
 
 # Add hostname to /etc/hosts
-echo "$NEW_IP    $NEW_HOSTNAME" | sudo tee -a /etc/hosts
+echo "$PARROT_IP    $PARROT_HOSTNAME" | sudo tee -a /etc/hosts
 
 # Set DNS to Cloudflare
-sudo nmcli connection modify "Wired connection 1" ipv4.dns "1.1.1.1"
+sudo nmcli connection modify "Wired connection 1" ipv4.dns "$CLOUDFLARE_IP"
 
 # Set gateway
-sudo nmcli connection modify "Wired connection 1" ipv4.gateway "$NEW_GATEWAY"
+sudo nmcli connection modify "Wired connection 1" ipv4.gateway "$PFSENSE_IP"
 
 # Restart networking services
 sudo systemctl restart NetworkManager
@@ -43,4 +45,4 @@ sudo systemctl restart NetworkManager
 read -p "Press Enter to continue after configuring Nessus"
 
 # Set DNS to FreeIPA server
-sudo nmcli connection modify "Wired connection 1" ipv4.dns "$NEW_DNS"
+sudo nmcli connection modify "Wired connection 1" ipv4.dns "$FREEIPA_IP"

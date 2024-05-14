@@ -1,11 +1,10 @@
 #!/bin/bash
-NIC=enp0s3
-NEW_IP=172.16.16.2
-NEW_DNS=127.0.0.1
-NEW_HOSTNAME=station.universalnoodles.lan
-REALM=UNIVERSALNOODLES.LAN 
-DOMAIN=universalnoodles.lan
-TRUSTED_HOSTS="127.0.0.1;172.16.16.1;172.16.16.3;172.16.16.4"
+
+# Ensure configuration file is present
+source preferences.conf || {
+	echo "Error: No configuration file found."
+	exit 1
+}
 
 # Take user input for IPA Admin password and have them confirm their choice
 while true; do
@@ -31,13 +30,13 @@ while true; do
 done
 
 # Set DNS to self
-sudo nmcli connection modify "$NIC" ipv4.dns "$NEW_DNS"
+sudo nmcli connection modify "$FREEIPA_NIC" ipv4.dns "$NEW_DNS"
 
 # Restart networking services
 sudo systemctl restart NetworkManager
 
 # Deploy FreeIPA
-sudo ipa-server-install --setup-dns --forwarder=1.1.1.1 --auto-reverse --realm="$REALM" --domain="$DOMAIN" --hostname="$NEW_HOSTNAME" --ip-address="$NEW_IP" --ds-password="$DM_PASS" --admin-password="$IPA_ADMIN_PASS" --mkhomedir --no-ntp --unattended
+sudo ipa-server-install --setup-dns --forwarder="$CLOUDFLARE_IP" --auto-reverse --realm="$REALM" --domain="$DOMAIN" --hostname="$FREEIPA_HOSTNAME" --ip-address="$FREEIPA_IP" --ds-password="$DM_PASS" --admin-password="$IPA_ADMIN_PASS" --mkhomedir --no-ntp --unattended
 
 # Obtain a TGT
 kinit admin
