@@ -2,9 +2,9 @@
 
 [Introduction](Documentation/Introduction.md)
 
-Microsoft Subnet Deployment Guide
+Microsoft Network Deployment Guide
 
-Red Hat Subnet Deployment Guide
+Red Hat Network Deployment Guide
 
 [Deployment Testing](Documentation/Testing.md)
 
