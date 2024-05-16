@@ -2,8 +2,6 @@
 Netgate. (2023). pfSense documentation. pfSense Documentation . https://docs.netgate.com/pfsense/en/latest/ 
 
 ## Windows Ecosystem
-DigitalRuby. IPBan. GitHub. https://github.com/DigitalRuby/IPBan
-
 Microsoft (2023, February 22). Settings list for the windows 10/11 MDM security baselines in Microsoft Intune - Microsoft Intune. Microsoft Learn | Microsoft Learn. https://learn.microsoft.com/en-us/mem/intune/protect/security-baseline-settings-mdm-all?pivots=mdm-november-2021
 
 Microsoft. (2023, June 15). Password policy recommendations. Microsoft Learn. https://learn.microsoft.com/en-us/microsoft-365/admin/misc/password-policy-recommendations?view=o365-worldwide
