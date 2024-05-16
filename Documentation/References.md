@@ -1,7 +1,4 @@
-## pfSense
-Netgate. (2023). pfSense documentation. pfSense Documentation . https://docs.netgate.com/pfsense/en/latest/ 
-
-## Windows Ecosystem
+## Microsoft Ecosystem
 Microsoft (2023, February 22). Settings list for the windows 10/11 MDM security baselines in Microsoft Intune - Microsoft Intune. Microsoft Learn | Microsoft Learn. https://learn.microsoft.com/en-us/mem/intune/protect/security-baseline-settings-mdm-all?pivots=mdm-november-2021
 
 Microsoft. (2023, June 15). Password policy recommendations. Microsoft Learn. https://learn.microsoft.com/en-us/microsoft-365/admin/misc/password-policy-recommendations?view=o365-worldwide
@@ -36,4 +33,10 @@ Red Hat. (2022). Security hardening red hat enterprise Linux 9. Red Hat Customer
 Mozilla. (n.d.). Customizing Firefox Using Group Policy (windows). Firefox for Enterprise Help. https://support.mozilla.org/en-US/kb/customizing-firefox-using-group-policy-windows 	
 
 Mozilla. (n.d.). Deploying Firefox with extensions. Firefox for Enterprise Help. https://support.mozilla.org/en-US/kb/deploying-firefox-with-extensions 
+
+## Oracle VirtualBox
+Oracle. (2024). User Manual. Oracle VM VirtualBox. https://www.virtualbox.org/manual/UserManual.html 
+
+## pfSense
+Netgate. (2023). pfSense documentation. pfSense Documentation . https://docs.netgate.com/pfsense/en/latest/ 
 
