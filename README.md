@@ -2,9 +2,7 @@
 
 [Introduction](Documentation/Introduction.md)
 
-[Microsoft Network Deployment Guide](Documentation/Deploy_MS.md)
-
-[Red Hat Network Deployment Guide](Documentation/Deploy_RH.md)
+[Deployment Guide](Documentation/Deploy.md)
 
 [Deployment Testing](Documentation/Testing.md)
 
