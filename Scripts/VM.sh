@@ -21,7 +21,6 @@ VBoxManage modifyvm "RH_freeIPA" --cpus 2
 VBoxManage createhd --filename "$VM_PATH"/"RH_freeIPA"/"RH_freeIPA".vdi --size 64000 --format VDI                     
 VBoxManage storagectl "RH_freeIPA" --name "SATA Controller" --add sata --controller IntelAhci       
 VBoxManage storageattach "RH_freeIPA" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"RH_freeIPA"/"RH_freeIPA".vdi            
-# Enable Secure Boot
 VBoxManage modifyvm "RH_freeIPA" --firmware efi64 
 VBoxManage modifynvram "RH_freeIPA" inituefivarstore
 VBoxManage modifynvram "RH_freeIPA" enrollmssignatures
@@ -36,7 +35,6 @@ VBoxManage modifyvm "RH_Ansible" --cpus 1
 VBoxManage createhd --filename "$VM_PATH"/"RH_Ansible"/"RH_Ansible".vdi --size 64000 --format VDI                     
 VBoxManage storagectl "RH_Ansible" --name "SATA Controller" --add sata --controller IntelAhci       
 VBoxManage storageattach "RH_Ansible" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"RH_Ansible"/"RH_Ansible".vdi            
-# Enable Secure Boot
 VBoxManage modifyvm "RH_Ansible" --firmware efi64 
 VBoxManage modifynvram "RH_Ansible" inituefivarstore
 VBoxManage modifynvram "RH_Ansible" enrollmssignatures
@@ -51,7 +49,6 @@ VBoxManage modifyvm "RH_DevStation" --cpus 2
 VBoxManage createhd --filename "$VM_PATH"/"RH_DevStation"/"RH_DevStation".vdi --size 64000 --format VDI                     
 VBoxManage storagectl "RH_DevStation" --name "SATA Controller" --add sata --controller IntelAhci       
 VBoxManage storageattach "RH_DevStation" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"RH_DevStation"/"RH_DevStation".vdi            
-# Enable Secure Boot
 VBoxManage modifyvm "RH_DevStation" --firmware efi64 
 VBoxManage modifynvram "RH_DevStation" inituefivarstore
 VBoxManage modifynvram "RH_DevStation" enrollmssignatures
@@ -76,8 +73,7 @@ VBoxManage modifyvm "MS_AD_Server" --intnet1 "windows"
 VBoxManage modifyvm "MS_AD_Server" --cpus 2
 VBoxManage createhd --filename "$VM_PATH"/"MS_AD_Server"/"MS_AD_Server".vdi --size 100000 --format VDI                     
 VBoxManage storagectl "MS_AD_Server" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "MS_AD_Server" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"MS_AD_Server"/"MS_AD_Server".vdi            
-# Enable Secure Boot
+VBoxManage storageattach "MS_AD_Server" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"MS_AD_Server"/"MS_AD_Server".vdi           
 VBoxManage modifyvm "MS_AD_Server" --firmware efi64 
 VBoxManage modifynvram "MS_AD_Server" inituefivarstore
 VBoxManage modifynvram "MS_AD_Server" enrollmssignatures
@@ -92,9 +88,7 @@ VBoxManage modifyvm "MS_DevStation" --cpus 2
 VBoxManage createhd --filename "$VM_PATH"/"MS_DevStation"/"MS_DevStation".vdi --size 80000 --format VDI                     
 VBoxManage storagectl "MS_DevStation" --name "SATA Controller" --add sata --controller IntelAhci       
 VBoxManage storageattach "MS_DevStation" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"MS_DevStation"/"MS_DevStation".vdi            
-# Enable Secure Boot
 VBoxManage modifyvm "MS_DevStation" --firmware efi64 
 VBoxManage modifynvram "MS_DevStation" inituefivarstore
 VBoxManage modifynvram "MS_DevStation" enrollmssignatures
 VBoxManage modifynvram "MS_DevStation" enrollorclpk
-
