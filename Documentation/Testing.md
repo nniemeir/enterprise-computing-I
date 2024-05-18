@@ -13,7 +13,7 @@
 | Item                                                                                                       | Testing Method                                                                                                                                     |
 |------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
 | The Active Directory server can enforce group policies                                                     | Generate a Group Policy report on both the AD server and the development workstation and check that all GPOs are being applied where intended |
-| PowerShell remoting from the Active Directory server to the development workstation is working as intended | Run a script on the development workstation from the Active Directory Server via PowerShell remoting                                 |
+| PowerShell remoting from the Active Directory server to the development workstation is working as intended | Run a script targeting the development workstation from the Active Directory Server via PowerShell remoting                                 |
 
 
 ## Red Hat Network Only
