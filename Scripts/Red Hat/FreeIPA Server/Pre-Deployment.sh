@@ -13,7 +13,7 @@ sudo nmcli connection modify "$FREEIPA_NIC" ipv4.method manual
 sudo hostnamectl set-hostname "$FREEIPA_HOSTNAME"
 
 # Set IP Address
-sudo nmcli connection modify "$FREEIPA_NIC" ipv4.addresses "$FREEIPA_NIC"
+sudo nmcli connection modify "$FREEIPA_NIC" ipv4.addresses "$FREEIPA_IP"
 
 # Set DNS
 sudo nmcli connection modify "$FREEIPA_NIC" ipv4.dns "$FREEIPA_DNS"
