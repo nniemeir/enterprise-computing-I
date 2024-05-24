@@ -150,5 +150,8 @@ ipa pwpolicy-mod --maxlife=42 --minlife=48 --history=5 --minclasses=4 --minlengt
 # Only allow DNS queries from trusted hosts
 ipa dnszone-mod "$DOMAIN" --allow-query="$TRUSTED_HOSTS"
 
+# Install Chromium to allow web UI access
+sudo dnf install chromium -y
+
 # Reboot 
 sudo systemctl reboot
