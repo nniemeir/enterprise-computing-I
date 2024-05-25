@@ -1,94 +1,76 @@
 #!/bin/bash
-VM_PATH="/mnt/media/VMs"
 
-VBoxManage createvm --name "RH_pfSense" --ostype "FreeBSD_64" --register --basefolder "$VM_PATH" 
-VBoxManage modifyvm "RH_pfSense" --memory 4096 --vram 128
-VBoxManage modifyvm "RH_pfSense" --graphicscontroller vmsvga
-VBoxManage modifyvm "RH_pfSense" --nic1 nat 
-VBoxManage modifyvm "RH_pfSense" --nic2 intnet 
-VBoxManage modifyvm "RH_pfSense" --intnet2 "linux"
-VBoxManage modifyvm "RH_pfSense" --cpus 2
-VBoxManage createhd --filename "$VM_PATH"/"RH_pfSense"/"RH_pfSense".vdi --size 64000 --format VDI                     
-VBoxManage storagectl "RH_pfSense" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "RH_pfSense" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"RH_pfSense"/"RH_pfSense".vdi            
+read -p "Enter desired VM parent directory (leave empty for home directory): " VMParentPath
 
-VBoxManage createvm --name "RH_freeIPA" --ostype "Fedora_64" --register --basefolder "$VM_PATH" 
-VBoxManage modifyvm "RH_freeIPA" --memory 8192 --vram 128
-VBoxManage modifyvm "RH_freeIPA" --graphicscontroller vmsvga
-VBoxManage modifyvm "RH_freeIPA" --nic1 intnet 
-VBoxManage modifyvm "RH_freeIPA" --intnet1 "linux"
-VBoxManage modifyvm "RH_freeIPA" --cpus 2
-VBoxManage createhd --filename "$VM_PATH"/"RH_freeIPA"/"RH_freeIPA".vdi --size 64000 --format VDI                     
-VBoxManage storagectl "RH_freeIPA" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "RH_freeIPA" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"RH_freeIPA"/"RH_freeIPA".vdi            
-VBoxManage modifyvm "RH_freeIPA" --firmware efi64 
-VBoxManage modifynvram "RH_freeIPA" inituefivarstore
-VBoxManage modifynvram "RH_freeIPA" enrollmssignatures
-VBoxManage modifynvram "RH_freeIPA" enrollorclpk
+if [[ -z "$VMParentPath" ]]; then
+    VMParentPath="$HOME"
+fi
 
-VBoxManage createvm --name "RH_Ansible" --ostype "Fedora_64" --register --basefolder "$VM_PATH" 
-VBoxManage modifyvm "RH_Ansible" --memory 2048 --vram 128
-VBoxManage modifyvm "RH_Ansible" --graphicscontroller vmsvga
-VBoxManage modifyvm "RH_Ansible" --nic1 intnet 
-VBoxManage modifyvm "RH_Ansible" --intnet1 "linux"
-VBoxManage modifyvm "RH_Ansible" --cpus 1
-VBoxManage createhd --filename "$VM_PATH"/"RH_Ansible"/"RH_Ansible".vdi --size 64000 --format VDI                     
-VBoxManage storagectl "RH_Ansible" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "RH_Ansible" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"RH_Ansible"/"RH_Ansible".vdi            
-VBoxManage modifyvm "RH_Ansible" --firmware efi64 
-VBoxManage modifynvram "RH_Ansible" inituefivarstore
-VBoxManage modifynvram "RH_Ansible" enrollmssignatures
-VBoxManage modifynvram "RH_Ansible" enrollorclpk
+# Remove trailing forward slash if present
+if [ "${VMParentPath: -1}" == "/" ]; then 
+	VMParentPath="${VMParentPath%/*}"
+fi
 
-VBoxManage createvm --name "RH_DevStation" --ostype "Fedora_64" --register --basefolder "$VM_PATH" 
-VBoxManage modifyvm "RH_DevStation" --memory 4096 --vram 128
-VBoxManage modifyvm "RH_DevStation" --graphicscontroller vmsvga
-VBoxManage modifyvm "RH_DevStation" --nic1 intnet 
-VBoxManage modifyvm "RH_DevStation" --intnet1 "linux"
-VBoxManage modifyvm "RH_DevStation" --cpus 2
-VBoxManage createhd --filename "$VM_PATH"/"RH_DevStation"/"RH_DevStation".vdi --size 64000 --format VDI                     
-VBoxManage storagectl "RH_DevStation" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "RH_DevStation" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"RH_DevStation"/"RH_DevStation".vdi            
-VBoxManage modifyvm "RH_DevStation" --firmware efi64 
-VBoxManage modifynvram "RH_DevStation" inituefivarstore
-VBoxManage modifynvram "RH_DevStation" enrollmssignatures
-VBoxManage modifynvram "RH_DevStation" enrollorclpk
+VMPath="$VMParentPath/Enterprise Computing I VMs"
 
-VBoxManage createvm --name "MS_pfSense" --ostype "FreeBSD_64" --register --basefolder "$VM_PATH" 
-VBoxManage modifyvm "MS_pfSense" --memory 4096 --vram 128
-VBoxManage modifyvm "MS_pfSense" --graphicscontroller vmsvga
-VBoxManage modifyvm "MS_pfSense" --nic1 nat 
-VBoxManage modifyvm "MS_pfSense" --nic2 intnet 
-VBoxManage modifyvm "MS_pfSense" --intnet2 "windows"
-VBoxManage modifyvm "MS_pfSense" --cpus 2
-VBoxManage createhd --filename "$VM_PATH"/"MS_pfSense"/"MS_pfSense".vdi --size 64000 --format VDI                     
-VBoxManage storagectl "MS_pfSense" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "MS_pfSense" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"MS_pfSense"/"MS_pfSense".vdi            
+# Ensure parent directory is writeable before proceeding
+if [ ! -w "$VMParentPath" ]; then 
+	echo "Unable to access the directory. Please ensure that you have write access"
+	exit 1
+fi
 
-VBoxManage createvm --name "MS_AD_Server" --ostype "Windows2022_64" --register --basefolder "$VM_PATH"
-VBoxManage modifyvm "MS_AD_Server" --memory 8192 --vram 128
-VBoxManage modifyvm "MS_AD_Server" --graphicscontroller vmsvga
-VBoxManage modifyvm "MS_AD_Server" --nic1 intnet 
-VBoxManage modifyvm "MS_AD_Server" --intnet1 "windows"
-VBoxManage modifyvm "MS_AD_Server" --cpus 2
-VBoxManage createhd --filename "$VM_PATH"/"MS_AD_Server"/"MS_AD_Server".vdi --size 100000 --format VDI                     
-VBoxManage storagectl "MS_AD_Server" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "MS_AD_Server" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"MS_AD_Server"/"MS_AD_Server".vdi           
-VBoxManage modifyvm "MS_AD_Server" --firmware efi64 
-VBoxManage modifynvram "MS_AD_Server" inituefivarstore
-VBoxManage modifynvram "MS_AD_Server" enrollmssignatures
-VBoxManage modifynvram "MS_AD_Server" enrollorclpk
+# Ensure VMs not deployed already
+if [ -d "$VMPath/RH_pfSense" ]; then
+	echo "A deployment already exists in this location"
+	exit 1
+fi
 
-VBoxManage createvm --name "MS_DevStation" --ostype "Windows11_64" --register --basefolder "$VM_PATH" 
-VBoxManage modifyvm "MS_DevStation" --memory 8192 --vram 128
-VBoxManage modifyvm "MS_DevStation" --graphicscontroller vmsvga
-VBoxManage modifyvm "MS_DevStation" --nic1 intnet 
-VBoxManage modifyvm "MS_DevStation" --intnet1 "windows"
-VBoxManage modifyvm "MS_DevStation" --cpus 2
-VBoxManage createhd --filename "$VM_PATH"/"MS_DevStation"/"MS_DevStation".vdi --size 80000 --format VDI                     
-VBoxManage storagectl "MS_DevStation" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "MS_DevStation" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VM_PATH"/"MS_DevStation"/"MS_DevStation".vdi            
-VBoxManage modifyvm "MS_DevStation" --firmware efi64 
-VBoxManage modifynvram "MS_DevStation" inituefivarstore
-VBoxManage modifynvram "MS_DevStation" enrollmssignatures
-VBoxManage modifynvram "MS_DevStation" enrollorclpk
+setupVM() {
+local vmName="$1"
+local osType="$2"
+local cpus="$3"
+local memorySize="$4"
+local storageSize="$5"
+local isFirewall="$6"
+local internalNetwork="$7"
+local EFIEnabled="$8"
+
+VBoxManage createvm --name "$vmName" --ostype "$osType" --register --basefolder "$VMPath" 
+VBoxManage modifyvm "$vmName" --memory "$memorySize" --vram 128
+VBoxManage modifyvm "$vmName" --graphicscontroller vmsvga
+if [ "$isFirewall" = true ] ; then
+VBoxManage modifyvm "$vmName" --nic1 nat 
+VBoxManage modifyvm "$vmName" --nic2 intnet 
+VBoxManage modifyvm "$vmName" --intnet2 $internalNetwork
+else 
+VBoxManage modifyvm "$vmName" --nic1 intnet 
+VBoxManage modifyvm "$vmName" --intnet1 "$internalNetwork"
+fi
+
+if [ "$EFIEnabled" = true ] ; then
+VBoxManage modifyvm "$vmName" --firmware efi64 
+VBoxManage modifynvram "$vmName" inituefivarstore
+VBoxManage modifynvram "$vmName" enrollmssignatures
+VBoxManage modifynvram "$vmName" enrollorclpk
+fi
+
+VBoxManage modifyvm "$vmName" --cpus $cpus
+VBoxManage createhd --filename "$VMPath"/"$vmName"/"$vmName".vdi --size $storageSize --format VDI                     
+VBoxManage storagectl "$vmName" --name "SATA Controller" --add sata --controller IntelAhci       
+VBoxManage storageattach "$vmName" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VMPath"/"$vmName"/"$vmName".vdi 
+}
+
+# pfSense does not support Secure Boot as of writing
+setupVM "RH_pfSense" "FreeBSD_64" 2 4096 64000 true "linux" false
+
+setupVM "RH_freeIPA" "Fedora_64" 2 8192 64000 false "linux" true 
+
+setupVM "RH_Ansible" "Fedora_64" 2 2048 64000 false "linux" true
+
+setupVM "RH_DevStation" "Fedora_64" 2 4096 64000 false "linux" true
+
+setupVM "MS_pfSense" "FreeBSD_64" 2 4096 64000 true "windows" false
+
+setupVM "MS_AD_Server" "Windows2022_64" 2 8192 100000 true "windows" true
+
+setupVM "MS_DevStation" "Windows11_64" 2 8192 80000 true "windows" true
