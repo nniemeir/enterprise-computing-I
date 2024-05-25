@@ -8,4 +8,4 @@
 
 [References](Documentation/References.md)
 
-*This project is currently being edited for readability*
+*This project is a work in progress*
