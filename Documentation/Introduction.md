@@ -1,5 +1,5 @@
 ## Preface
-The goal of this academic project was to develop a greater understanding of how network/system administration is done on small domains and what similarities and differences exist between how enterprise networks built around the Microsoft and Red Hat ecosystems are managed.
+This repository contains a revised version of an academic project done by myself in 2022. The goal of the project was to develop a greater understanding of how network/system administration is done on small domains and what similarities and differences exist between how enterprise networks built around the Microsoft and Red Hat ecosystems are managed.
 
 The project was done in six stages:
 
