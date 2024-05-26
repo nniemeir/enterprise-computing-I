@@ -16,6 +16,9 @@ if (-not(New-Item -Path "$VMParentPath" -Name writable -ItemType "file" -Value "
 	Write-Host "Unable to access the directory. Please ensure that you have write access"
 	exit 1
 }
+else {
+Remove-Item "$VMParentPath\writable"
+}
 
 if (Test-Path -Path "$VMPath\RH_pfSense") {
 	Write-Host "A deployment already exists in this location"
