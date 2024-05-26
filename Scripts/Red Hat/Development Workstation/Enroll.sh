@@ -10,13 +10,13 @@ source ../preferences.conf || {
 sudo nmcli connection modify "Wired connection 1" ipv4.method manual
 
 # Set IP Address
-sudo nmcli connection modify "Wired connection 1" ipv4.addresses "$DEV_IP"
+sudo nmcli connection modify "Wired connection 1" ipv4.addresses "$DEVSTATION_IP"
 
 # Set hostname
-sudo hostnamectl set-hostname "$DEV_HOSTNAME"
+sudo hostnamectl set-hostname "$DEVSTATION_HOSTNAME"
 
 # Add hostname to /etc/hosts
-echo "$DEV_IP    $DEV_HOSTNAME" | sudo tee -a /etc/hosts
+echo "$DEVSTATION_IP    $DEVSTATION_HOSTNAME" | sudo tee -a /etc/hosts
 
 # Add IPA server to /etc/hosts
 echo "$FREEIPA_IP    $FREEIPA_HOSTNAME" | sudo tee -a /etc/hosts
@@ -66,7 +66,7 @@ sudo nmcli connection modify "Wired connection 1" ipv4.dns "$FREEIPA_IP"
 sudo systemctl restart NetworkManager
 
 # Enroll device as FreeIPA client
-sudo ipa-client-install --domain="$DOMAIN" --hostname="$DEV_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$FREEIPA_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
+sudo ipa-client-install --domain="$DOMAIN" --hostname="$DEVSTATION_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$FREEIPA_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
 
 # Procure Kerberos ticket
 kinit "$ENROLL_USER"

@@ -1,6 +1,8 @@
+. .\..\preferences.ps1
+
 # Copy ADMX templates to domain controller and domain member
 Copy-Item -Path ".\Group Policy\Templates\Windows Server 2022\*" -Destination "C:\Windows\PolicyDefinitions\" -Recurse
-Copy-Item -Path ".\Group Policy\Templates\Windows 11\*" -Destination "C:\Windows\PolicyDefinitions\" -ToSession (New-PSSession -ComputerName PASSENGER01) -Recurse
+Copy-Item -Path ".\Group Policy\Templates\Windows 11\*" -Destination "C:\Windows\PolicyDefinitions\" -ToSession (New-PSSession -ComputerName $DevStationHostname) -Recurse
 
 Invoke-WebRequest "https://github.com/mozilla/policy-templates/releases/download/v5.2/policy_templates_v5.2.zip" -OutFile ".\policy_templates.zip"
 Expand-Archive -Path ".\policy_templates.zip" -DestinationPath ".\policies\"
@@ -27,41 +29,41 @@ Import-GPO -BackupID "77043E0B-CB1D-40CE-88EF-BA6B82B44A89" -Path $GPOLocation -
 # Set Security Filtering for imported GPO backups
 Get-GPO -Name 'MSFT Windows Server 2022 - Defender Antivirus' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
 Get-GPO -Name 'MSFT Windows Server 2022 - Defender Antivirus' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'STATION' -TargetType computer 
-New-GPLink -Name 'MSFT Windows Server 2022 - Defender Antivirus' -Target "dc=universalnoodles,dc=lan" -LinkEnabled Yes
+New-GPLink -Name 'MSFT Windows Server 2022 - Defender Antivirus' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows Server 2022 - Domain Controller' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
 Get-GPO -Name 'MSFT Windows Server 2022 - Domain Controller' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'STATION' -TargetType computer 
-New-GPLink -Name 'MSFT Windows Server 2022 - Domain Controller' -Target "dc=universalnoodles,dc=lan" -LinkEnabled Yes
+New-GPLink -Name 'MSFT Windows Server 2022 - Domain Controller' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows 11 22H2 - BitLocker' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
 Get-GPO -Name 'MSFT Windows 11 22H2 - BitLocker' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
-New-GPLink -Name 'MSFT Windows 11 22H2 - Bitlocker' -Target "dc=universalnoodles,dc=lan" -LinkEnabled Yes
+New-GPLink -Name 'MSFT Windows 11 22H2 - Bitlocker' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows 11 22H2 - Computer' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
 Get-GPO -Name 'MSFT Windows 11 22H2 - Computer' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
-New-GPLink -Name 'MSFT Windows 11 22H2 - Computer' -Target "dc=universalnoodles,dc=lan" -LinkEnabled Yes
+New-GPLink -Name 'MSFT Windows 11 22H2 - Computer' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows 11 22H2 - Defender Antivirus' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
 Get-GPO -Name 'MSFT Windows 11 22H2 - Defender Antivirus' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
-New-GPLink -Name 'MSFT Windows 11 22H2 - Defender Antivirus' -Target "dc=universalnoodles,dc=lan" -LinkEnabled Yes
+New-GPLink -Name 'MSFT Windows 11 22H2 - Defender Antivirus' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows 11 22H2 - User' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
 Get-GPO -Name 'MSFT Windows 11 22H2 - User' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
-New-GPLink -Name 'MSFT Windows 11 22H2 - User' -Target "dc=universalnoodles,dc=lan" -LinkEnabled Yes
+New-GPLink -Name 'MSFT Windows 11 22H2 - User' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'Firefox' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
 Get-GPO -Name 'Firefox' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
-New-GPLink -Name 'Firefox' -Target "dc=universalnoodles,dc=lan" -LinkEnabled Yes
+New-GPLink -Name 'Firefox' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 Get-GPO -Name 'Password Policy' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'STATION' -TargetType computer 
 Get-GPO -Name 'Password Policy' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
-New-GPLink -Name 'Password Policy' -Target "dc=universalnoodles,dc=lan" -LinkEnabled Yes
+New-GPLink -Name 'Password Policy' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Read-Host "Press Enter to exit"

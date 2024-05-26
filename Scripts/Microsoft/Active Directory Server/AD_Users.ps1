@@ -1,3 +1,5 @@
+. .\..\preferences.ps1
+
 $UserCSV = Import-Csv ".\Records\Users_Developers.csv" -Delimiter ";"
 foreach ($User in $UserCSV) {
     $firstname = $User.firstname
@@ -20,7 +22,7 @@ foreach ($User in $UserCSV) {
         "$tempPassword" | Out-File -FilePath ".\Reports\$username Temporary.txt"
         New-ADUser `
             -SamAccountName $username `
-            -UserPrincipalName "$username@$universalnoodles.lan" `
+            -UserPrincipalName "$username@$Domain" `
             -Name "$firstname $lastname" `
             -GivenName $firstname `
             -Surname $lastname `
@@ -29,7 +31,7 @@ foreach ($User in $UserCSV) {
             -EmailAddress $email `
             -Title $jobtitle `
             -AccountPassword (ConvertTo-secureString $tempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
-            -LogonWorkstations "PASSENGER01"
+            -LogonWorkstations "$DevStationHostname"
 
             
         Write-Host "Created user $username"
@@ -68,7 +70,7 @@ foreach ($dAdmin in $dAdminsCSV) {
             -Title $jobtitle `
             -AccountPassword (ConvertTo-secureString $tempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
             -MemberOf "Administrators" `
-            -LogonWorkstations "PASSENGER01"
+            -LogonWorkstations "$DevStationHostname"
             
         Write-Host "Created user $username"
     }
