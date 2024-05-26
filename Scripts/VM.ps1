@@ -1,5 +1,5 @@
 
-VMParentPath = Read-Host "Enter desired VM parent directory (leave empty for home directory): "
+$VMParentPath = Read-Host "Enter desired VM parent directory (leave empty for home directory): "
 
 if (-not($VMParentPath)) {
     $VMParentPath = $env:USERPROFILE
@@ -12,7 +12,7 @@ if ($VMParentPath -match '\\$' ) {
 
 $VMPath="$VMParentPath\Enterprise Computing I VMs"
 
-if ( ! New-Item -Path "$VMPath" -Name writable -ItemType "file" -Value "Test") {	
+if (-not(New-Item -Path "$VMParentPath" -Name writable -ItemType "file" -Value "Test")) {
 	Write-Host "Unable to access the directory. Please ensure that you have write access"
 	exit 1
 }
@@ -52,9 +52,9 @@ VBoxManage modifynvram "$vmName" enrollorclpk
 }
 
 VBoxManage modifyvm "$vmName" --cpus $cpus
-VBoxManage createhd --filename "$VMPath"\"$vmName"\"$vmName".vdi --size $storageSize --format VDI                     
+VBoxManage createhd --filename "$VMPath\$vmName\$vmName.vdi" --size $storageSize --format VDI                     
 VBoxManage storagectl "$vmName" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "$vmName" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  "$VMPath"\"$vmName"\"$vmName".vdi 
+VBoxManage storageattach "$vmName" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  $VMPath\$vmName\$vmName.vdi 
 }
 
 # pfSense does not support Secure Boot as of writing
