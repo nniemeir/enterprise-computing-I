@@ -2,77 +2,77 @@
 
 $UserCSV = Import-Csv ".\Records\Users_Developers.csv" -Delimiter ";"
 foreach ($User in $UserCSV) {
-    $firstname = $User.firstname
-    $lastname = $User.lastname
-    $username = $User.username
-    $email = $User.email
-    $jobtitle = $User.jobtitle
+    $FirstName = $User.FirstName
+    $LastName = $User.LastName
+    $Username = $User.Username
+    $Email = $User.Email
+    $JobTitle = $User.JobTitle
     # Make sure that the user doesn't already exist
-    if (Get-ADUser -Filter { SamAccountName -eq $username }) {
-        Write-Warning "User $username already exists"
+    if (Get-ADUser -Filter { SamAccountName -eq $Username }) {
+        Write-Warning "User $Username already exists"
     }
     else {
         # Generate a temporary password for the user
         Add-Type -AssemblyName 'System.Web'
-        $length = Get-Random -Minimum 12 -Maximum 20
-        $maxNonAlphanum = $length - 4
-        $nonAlphanum = Get-Random -Minimum 5 -Maximum $maxNonAlphanum
-        $tempPassword=[System.Web.Security.Membership]::GeneratePassword($length,$nonAlphaNum)
+        $Length = Get-Random -Minimum 12 -Maximum 20
+        $MaxNonAlphanum = $Length - 4
+        $NonAlphaNum = Get-Random -Minimum 5 -Maximum $MaxNonAlphanum
+        $TempPassword=[System.Web.Security.Membership]::GeneratePassword($Length,$NonAlphaNum)
         # The user's temporary password is written to a text file, this would be printed and given to them
-        "$tempPassword" | Out-File -FilePath ".\Reports\$username Temporary.txt"
+        "$TempPassword" | Out-File -FilePath ".\Reports\$Username Temporary.txt"
         New-ADUser `
-            -SamAccountName $username `
-            -UserPrincipalName "$username@$Domain" `
-            -Name "$firstname $lastname" `
-            -GivenName $firstname `
-            -Surname $lastname `
+            -SamAccountName $Username `
+            -UserPrincipalName "$Username@$Domain" `
+            -Name "$FirstName $LastName" `
+            -GivenName $FirstName `
+            -Surname $LastName `
             -Enabled $True `
-            -DisplayName "$lastname, $firstname" `
-            -EmailAddress $email `
-            -Title $jobtitle `
-            -AccountPassword (ConvertTo-secureString $tempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
+            -DisplayName "$LastName, $FirstName" `
+            -EmailAddress $Email `
+            -Title $JobTitle `
+            -AccountPassword (ConvertTo-secureString $TempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
             -LogonWorkstations "$DevStationHostname"
 
             
-        Write-Host "Created user $username"
+        Write-Host "Created user $Username"
     }
 }
 
 $dAdminsCSV = Import-Csv ".\Records\Users_Desktop_Admins.csv" -Delimiter ";"
 foreach ($dAdmin in $dAdminsCSV) {
-    $firstname = $User.firstname
-    $lastname = $User.lastname
-    $username = $User.username
-    $email = $User.email
-    $jobtitle = $User.jobtitle
+    $FirstName = $User.FirstName
+    $LastName = $User.LastName
+    $Username = $User.Username
+    $Email = $User.Email
+    $JobTitle = $User.JobTitle
     # Make sure that the user doesn't already exist
-    if (Get-ADUser -Filter { SamAccountName -eq $username }) {
-        Write-Warning "User $username already exists"
+    if (Get-ADUser -Filter { SamAccountName -eq $Username }) {
+        Write-Warning "User $Username already exists"
     }
     else {
         # Generate a temporary password for the user
         Add-Type -AssemblyName 'System.Web'
-        $length = Get-Random -Minimum 12 -Maximum 20
-        $maxNonAlphanum = $length - 4
-        $nonAlphanum = Get-Random -Minimum 5 -Maximum $maxNonAlphanum
-        $tempPassword=[System.Web.Security.Membership]::GeneratePassword($length,$nonAlphaNum)
+        $Length = Get-Random -Minimum 12 -Maximum 20
+        $MaxNonAlphanum = $Length - 4
+        $NonAlphaNum = Get-Random -Minimum 5 -Maximum $MaxNonAlphanum
+        $TempPassword=[System.Web.Security.Membership]::GeneratePassword($Length,$NonAlphaNum)
         # The user's temporary password is written to a text file, this would be printed and given to them
-        "$tempPassword" | Out-File -FilePath ".\Reports\$username Temporary.txt"
+        "$TempPassword" | Out-File -FilePath ".\Reports\$Username Temporary.txt"
         New-ADUser `
-            -SamAccountName $username `
-            -UserPrincipalName "$username@$universalnoodles.lan" `
-            -Name "$firstname $lastname" `
-            -GivenName $firstname `
-            -Surname $lastname `
+            -SamAccountName $Username `
+            -UserPrincipalName "$Username@$universalnoodles.lan" `
+            -Name "$FirstName $LastName" `
+            -GivenName $FirstName `
+            -Surname $LastName `
             -Enabled $True `
-            -DisplayName "$lastname, $firstname" `
-            -EmailAddress $email `
-            -Title $jobtitle `
-            -AccountPassword (ConvertTo-secureString $tempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
+            -DisplayName "$LastName, $FirstName" `
+            -EmailAddress $Email `
+            -Title $JobTitle `
+            -AccountPassword (ConvertTo-secureString $TempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
             -MemberOf "Administrators" `
             -LogonWorkstations "$DevStationHostname"
             
-        Write-Host "Created user $username"
+        Write-Host "Created user $Username"
     }
     }
 Read-Host "Press Enter to exit"

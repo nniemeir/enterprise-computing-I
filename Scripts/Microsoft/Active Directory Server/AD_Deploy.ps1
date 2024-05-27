@@ -6,7 +6,7 @@ New-NetIPAddress `
     -InterfaceAlias "Ethernet" `
     -IPAddress $ServerIP `
     -PrefixLength 24 `
-    -DefaultGateway $pfSenseIP
+    -DefaultGateway $PfSenseIP
 
 # Set DNS server to Cloudflare
 Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses $CloudflareIP
@@ -23,8 +23,8 @@ Write-Host "Configuring AD DS, the system will reboot once this task is complete
 Install-ADDSForest -DomainName "$Domain" -InstallDns 
 
 # Add DNS entries
-$DNSCSV = Import-Csv ".\Records\DNS_Records.csv"
-foreach ($Entry in $DNSCSV) {
+$DnsCsv = Import-Csv ".\Records\DNS_Records.csv"
+foreach ($Entry in $DnsCsv) {
     $EntryIP = $Entry.IP
     $EntryHostname = $Entry.Hostname
 

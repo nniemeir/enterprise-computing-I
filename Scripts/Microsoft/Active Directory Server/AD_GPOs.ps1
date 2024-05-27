@@ -28,41 +28,41 @@ Import-GPO -BackupID "77043E0B-CB1D-40CE-88EF-BA6B82B44A89" -Path $GPOLocation -
 
 # Set Security Filtering for imported GPO backups
 Get-GPO -Name 'MSFT Windows Server 2022 - Defender Antivirus' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
-Get-GPO -Name 'MSFT Windows Server 2022 - Defender Antivirus' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'STATION' -TargetType computer 
+Get-GPO -Name 'MSFT Windows Server 2022 - Defender Antivirus' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$ServerHostname' -TargetType computer 
 New-GPLink -Name 'MSFT Windows Server 2022 - Defender Antivirus' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows Server 2022 - Domain Controller' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
-Get-GPO -Name 'MSFT Windows Server 2022 - Domain Controller' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'STATION' -TargetType computer 
+Get-GPO -Name 'MSFT Windows Server 2022 - Domain Controller' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$ServerHostname' -TargetType computer 
 New-GPLink -Name 'MSFT Windows Server 2022 - Domain Controller' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows 11 22H2 - BitLocker' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
-Get-GPO -Name 'MSFT Windows 11 22H2 - BitLocker' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
+Get-GPO -Name 'MSFT Windows 11 22H2 - BitLocker' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$DevStationHostname' -TargetType computer 
 New-GPLink -Name 'MSFT Windows 11 22H2 - Bitlocker' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows 11 22H2 - Computer' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
-Get-GPO -Name 'MSFT Windows 11 22H2 - Computer' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
+Get-GPO -Name 'MSFT Windows 11 22H2 - Computer' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$DevStationHostname' -TargetType computer 
 New-GPLink -Name 'MSFT Windows 11 22H2 - Computer' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows 11 22H2 - Defender Antivirus' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
-Get-GPO -Name 'MSFT Windows 11 22H2 - Defender Antivirus' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
+Get-GPO -Name 'MSFT Windows 11 22H2 - Defender Antivirus' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$DevStationHostname' -TargetType computer 
 New-GPLink -Name 'MSFT Windows 11 22H2 - Defender Antivirus' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'MSFT Windows 11 22H2 - User' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
-Get-GPO -Name 'MSFT Windows 11 22H2 - User' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
+Get-GPO -Name 'MSFT Windows 11 22H2 - User' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$DevStationHostname' -TargetType computer 
 New-GPLink -Name 'MSFT Windows 11 22H2 - User' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 
 Get-GPO -Name 'Firefox' | Set-GPPermissions -Replace -PermissionLevel None -TargetName 'Authenticated Users' -TargetType group 
-Get-GPO -Name 'Firefox' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
+Get-GPO -Name 'Firefox' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$DevStationHostname' -TargetType computer 
 New-GPLink -Name 'Firefox' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
-Get-GPO -Name 'Password Policy' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'STATION' -TargetType computer 
-Get-GPO -Name 'Password Policy' | Set-GPPermissions -PermissionLevel gpoapply -TargetName 'PASSENGER01' -TargetType computer 
+Get-GPO -Name 'Password Policy' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$ServerHostname' -TargetType computer 
+Get-GPO -Name 'Password Policy' | Set-GPPermissions -PermissionLevel gpoapply -TargetName '$DevStationHostname' -TargetType computer 
 New-GPLink -Name 'Password Policy' -Target "dc=$Domain,dc=lan" -LinkEnabled Yes
 
 

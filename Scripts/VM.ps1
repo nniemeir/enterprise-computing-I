@@ -26,38 +26,38 @@ if (Test-Path -Path "$VMPath\RH_pfSense") {
 }
 
 function New-VM {
-$vmName = $args[0]
-$osType = $args[1]
-$cpus = $args[2]
-$memorySize = $args[3]
-$storageSize = $args[4]
-$isFirewall = $args[5]
-$internalNetwork = $args[6]
+$VMName = $args[0]
+$OSType = $args[1]
+$CPUs = $args[2]
+$MemorySize = $args[3]
+$StorageSize = $args[4]
+$IsFirewall = $args[5]
+$InternalNetwork = $args[6]
 $EFIEnabled = $args[7]
 
-VBoxManage createvm --name "$vmName" --ostype "$osType" --register --basefolder "$VMPath" 
-VBoxManage modifyvm "$vmName" --memory "$memorySize" --vram 128
-VBoxManage modifyvm "$vmName" --graphicscontroller vmsvga
-if ( $isFirewall -eq $true) {
-VBoxManage modifyvm "$vmName" --nic1 nat 
-VBoxManage modifyvm "$vmName" --nic2 intnet 
-VBoxManage modifyvm "$vmName" --intnet2 $internalNetwork
+VBoxManage createvm --name "$VMName" --ostype "$OSType" --register --basefolder "$VMPath" 
+VBoxManage modifyvm "$VMName" --memory "$MemorySize" --vram 128
+VBoxManage modifyvm "$VMName" --graphicscontroller vmsvga
+if ( $IsFirewall -eq $true) {
+VBoxManage modifyvm "$VMName" --nic1 nat 
+VBoxManage modifyvm "$VMName" --nic2 intnet 
+VBoxManage modifyvm "$VMName" --intnet2 $InternalNetwork
 } else {
-VBoxManage modifyvm "$vmName" --nic1 intnet 
-VBoxManage modifyvm "$vmName" --intnet1 "$internalNetwork"
+VBoxManage modifyvm "$VMName" --nic1 intnet 
+VBoxManage modifyvm "$VMName" --intnet1 "$InternalNetwork"
 }
 
 if ( $EFIEnabled -eq $true) {
-VBoxManage modifyvm "$vmName" --firmware efi64 
-VBoxManage modifynvram "$vmName" inituefivarstore
-VBoxManage modifynvram "$vmName" enrollmssignatures
-VBoxManage modifynvram "$vmName" enrollorclpk
+VBoxManage modifyvm "$VMName" --firmware efi64 
+VBoxManage modifynvram "$VMName" inituefivarstore
+VBoxManage modifynvram "$VMName" enrollmssignatures
+VBoxManage modifynvram "$VMName" enrollorclpk
 }
 
-VBoxManage modifyvm "$vmName" --cpus $cpus
-VBoxManage createhd --filename "$VMPath\$vmName\$vmName.vdi" --size $storageSize --format VDI                     
-VBoxManage storagectl "$vmName" --name "SATA Controller" --add sata --controller IntelAhci       
-VBoxManage storageattach "$vmName" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  $VMPath\$vmName\$vmName.vdi 
+VBoxManage modifyvm "$VMName" --cpus $CPUs
+VBoxManage createhd --filename "$VMPath\$VMName\$VMName.vdi" --size $StorageSize --format VDI                     
+VBoxManage storagectl "$VMName" --name "SATA Controller" --add sata --controller IntelAhci       
+VBoxManage storageattach "$VMName" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  $VMPath\$VMName\$VMName.vdi 
 }
 
 # pfSense does not support Secure Boot as of writing

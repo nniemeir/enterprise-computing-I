@@ -1,7 +1,7 @@
 $CloudflareIP = "1.1.1.1"
 $Domain = "universalnoodles.lan"
 
-$pfSenseIP = "173.16.16.1"
+$PfSenseIP = "173.16.16.1"
 
 $ServerFQDN = "station.universalnoodles.lan"
 $ServerHostname = "station"
