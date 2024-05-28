@@ -8,9 +8,9 @@ source ../preferences.conf || {
 
 # Take user input for IPA Admin password and have them confirm their choice
 while true; do
-	read -p "Enter the desired IPA Admin password: " IPA_ADMIN_PASS
-	read -p "Confirm the IPA Admin password: " IPA_ADMIN_PASS_2
-	if [ "$IPA_ADMIN_PASS" == "$IPA_ADMIN_PASS_2" ]; then
+	read -p "Enter the desired IPA Admin password: " ipa_admin_pass
+	read -p "Confirm the IPA Admin password: " ipa_admin_pass_2
+	if [ "$ipa_admin_pass" == "$ipa_admin_pass_2" ]; then
 		break
 	else
 		echo "Passwords do not match"
@@ -20,9 +20,9 @@ done
 # Take user input for Directory Manager password and have them confirm their choice
 while true; do
 
-	read -p "Enter the desired Directory Manager password: " DM_PASS
-	read -p "Confirm the Directory Manager password: " DM_PASS_2
-	if [ "$DM_PASS" == "$DM_PASS_2" ]; then
+	read -p "Enter the desired Directory Manager password: " dm_pass
+	read -p "Confirm the Directory Manager password: " dm_pass_2
+	if [ "$dm_pass" == "$dm_pass_2" ]; then
 		break
 	else
 		echo "Passwords do not match"
@@ -36,7 +36,7 @@ sudo nmcli connection modify "$FREEIPA_NIC" ipv4.dns "$NEW_DNS"
 sudo systemctl restart NetworkManager
 
 # Deploy FreeIPA
-sudo ipa-server-install --setup-dns --forwarder="$CLOUDFLARE_IP" --auto-reverse --realm="$REALM" --domain="$DOMAIN" --hostname="$FREEIPA_HOSTNAME" --ip-address="$FREEIPA_IP" --ds-password="$DM_PASS" --admin-password="$IPA_ADMIN_PASS" --mkhomedir --no-ntp --unattended
+sudo ipa-server-install --setup-dns --forwarder="$CLOUDFLARE_IP" --auto-reverse --realm="$REALM" --domain="$DOMAIN" --hostname="$FREEIPA_HOSTNAME" --ip-address="$FREEIPA_IP" --ds-password="$dm_pass" --admin-password="$ipa_admin_pass" --mkhomedir --no-ntp --unattended
 
 # Obtain a TGT
 kinit admin
@@ -45,9 +45,9 @@ kinit admin
 ipa config-mod --defaultshell=/bin/bash
 
 # Add DNS records
-while IFS="," read -r recIP recHostname
+while IFS="," read -r rec_ip rec_hostname
 do
-    ipa dnsrecord-add $DOMAIN "$recHostname" --a-rec="$recIP"
+    ipa dnsrecord-add $DOMAIN "$rec_hostname" --a-rec="$rec_ip"
 done < "Records/DNS_Records.csv"
 
 # Create user groups
@@ -59,7 +59,7 @@ ipa hostgroup-add developer_workstations
 ipa hostgroup-add non-FreeIPA_servers 
 
 # Create users and add them to appropriate groups
-while IFS="," read -r username first last title
+while IFS=";" read -r first last username title
 do
     # Remove trailing whitespace characters
     title=${title%$'\r'}
@@ -70,9 +70,9 @@ do
     
     # Generate a secure temporary password for the user
     echo "$username" > Temporary/"$first $last".txt
-    tempPass=$(tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' </dev/urandom | head -c 16)
-    ipa user-mod "$username" --setattr userpassword="$tempPass"
-    echo "$tempPass" >> Temporary/"$first $last".txt
+    temp_pass=$(tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' </dev/urandom | head -c 16)
+    ipa user-mod "$username" --setattr userpassword="$temp_pass"
+    echo "$temp_pass" >> Temporary/"$first $last".txt
     
     # Require user to change password on first login
     ipa user-mod "$username" --setattr krbpasswordexpiration="2023-11-18 20:00:00Z"
@@ -82,7 +82,7 @@ do
 
 done < "Records/Users_Desktop_Admins.csv"
 
-while IFS="," read -r username first last title
+while IFS=";" read -r username first last title
 do
     # Remove trailing whitespace characters
     title=${title%$'\r'}
@@ -93,9 +93,9 @@ do
     
     # Generate a secure temporary password for the user
     echo "$username" > Temporary/"$first $last".txt
-    tempPass=$(tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' </dev/urandom | head -c 16)
-    ipa user-mod "$username" --setattr userpassword="$tempPass"
-    echo "$tempPass" >> Temporary/"$first $last".txt
+    temp_pass=$(tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' </dev/urandom | head -c 16)
+    ipa user-mod "$username" --setattr userpassword="$temp_pass"
+    echo "$temp_pass" >> Temporary/"$first $last".txt
     
     # Require user to change password on first login
     ipa user-mod "$username" --setattr krbpasswordexpiration="2023-11-18 20:00:00Z"

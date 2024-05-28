@@ -50,9 +50,9 @@ sudo firewall-cmd --reload\
 
 # Take user input for IPA Admin password and have them confirm their choice
 while true; do
-	read -p "Enter the password of a user authorized to enroll devices: " IPA_ADMIN_PASS
-	read -p "Enter the password again: " IPA_ADMIN_PASS_2
-	if [ "$IPA_ADMIN_PASS" == "$IPA_ADMIN_PASS_2" ]; then
+	read -p "Enter the password of a user authorized to enroll devices: " ipa_admin_pass
+	read -p "Enter the password again: " ipa_admin_pass_2
+	if [ "$ipa_admin_pass" == "$ipa_admin_pass_2" ]; then
 		break
 	else
 		echo "Passwords do not match"
@@ -66,7 +66,7 @@ sudo nmcli connection modify "Wired connection 1" ipv4.dns "$FREEIPA_IP"
 sudo systemctl restart NetworkManager
 
 # Enroll device as FreeIPA client
-sudo ipa-client-install --domain="$DOMAIN" --hostname="$DEVSTATION_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$FREEIPA_HOSTNAME" --password="$IPA_ADMIN_PASS" --unattended
+sudo ipa-client-install --domain="$DOMAIN" --hostname="$DEVSTATION_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$FREEIPA_HOSTNAME" --password="$ipa_admin_pass" --unattended
 
 # Procure Kerberos ticket
 kinit "$ENROLL_USER"
