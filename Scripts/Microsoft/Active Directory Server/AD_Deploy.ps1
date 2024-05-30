@@ -17,6 +17,9 @@ Rename-Computer -NewName "$ServerHostname" -Force -PassThru
 # Apply network configuration changes
 Restart-NetAdapter -Name "Ethernet"
 
+# Install DNS Server role
+Install-WindowsFeature -Name DNS
+
 # Install Active Directory Domain Services
 Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
 Write-Host "Configuring AD DS, the system will reboot once this task is complete"
@@ -29,13 +32,12 @@ foreach ($Entry in $DnsCsv) {
     $EntryHostname = $Entry.Hostname
 
     # Make sure that the DNS Record doesn't already exist
-    if (Resolve-DnsName -Name $EntryHostname -Server "$ServerFQDN") {
+    if (Resolve-DnsName -Name $EntryHostname -Server $ServerFQDN) {
         Write-Warning "DNS Record for $EntryHostname Already Exists"
     }
     else {
         Add-DnsServerResourceRecordA `
         -Name "$EntryHostname" `
-        -ZoneName "$Domain" `
         -AllowUpdateAny `
         -IPv4Address "$EntryIP" `
         -TimeToLive 01:00:00 `

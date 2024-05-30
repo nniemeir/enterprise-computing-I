@@ -29,15 +29,16 @@ function New-VM {
 $VMName = $args[0]
 $OSType = $args[1]
 $CPUs = $args[2]
-$MemorySize = $args[3]
-$StorageSize = $args[4]
-$IsFirewall = $args[5]
-$InternalNetwork = $args[6]
-$EFIEnabled = $args[7]
+$GraphicsController = $args[3]
+$MemorySize = $args[4]
+$StorageSize = $args[5]
+$IsFirewall = $args[6]
+$InternalNetwork = $args[7]
+$EFIEnabled = $args[8]
 
 VBoxManage createvm --name "$VMName" --ostype "$OSType" --register --basefolder "$VMPath" 
 VBoxManage modifyvm "$VMName" --memory "$MemorySize" --vram 128
-VBoxManage modifyvm "$VMName" --graphicscontroller vmsvga
+VBoxManage modifyvm "$VMName" --graphicscontroller $GraphicsController
 if ( $IsFirewall -eq $true) {
 VBoxManage modifyvm "$VMName" --nic1 nat 
 VBoxManage modifyvm "$VMName" --nic2 intnet 
@@ -61,16 +62,16 @@ VBoxManage storageattach "$VMName" --storagectl "SATA Controller" --port 0 --dev
 }
 
 # pfSense does not support Secure Boot as of writing
-New-VM "RH_pfSense" "FreeBSD_64" 2 4096 64000 $true "linux" $false
+New-VM "RH_pfSense" "FreeBSD_64" 2 "VMSVGA"4096 64000 $true "linux" $false
 
-New-VM "RH_freeIPA" "Fedora_64" 2 8192 64000 $false "linux" $true 
+New-VM "RH_freeIPA" "Fedora_64" 2 "VMSVGA" 8192 64000 $false "linux" $true 
 
-New-VM "RH_Ansible" "Fedora_64" 2 2048 64000 $false "linux" $true
+New-VM "RH_Ansible" "Fedora_64" 2 "VMSVGA" 2048 64000 $false "linux" $true
 
-New-VM "RH_DevStation" "Fedora_64" 2 4096 64000 $false "linux" $true
+New-VM "RH_DevStation" "Fedora_64" 2 "VMSVGA" 4096 64000 $false "linux" $true
 
-New-VM "MS_pfSense" "FreeBSD_64" 2 4096 64000 $true "windows" $false
+New-VM "MS_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 $true "windows" $false
 
-New-VM "MS_AD_Server" "Windows2022_64" 2 8192 100000 $true "windows" $true
+New-VM "MS_AD_Server" "Windows2022_64" 2 "VBoxSVGA" 8192 100000 $true "windows" $true
 
-New-VM "MS_DevStation" "Windows11_64" 2 8192 80000 $true "windows" $true
+New-VM "MS_DevStation" "Windows11_64" 2 "VBoxSVGA" 8192 80000 $true "windows" $true
