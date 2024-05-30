@@ -43,12 +43,12 @@ foreach ($User in $UserCsv) {
 }
 
 $DesktopAdminsCsv = Import-Csv ".\Records\Users_Desktop_Admins.csv" -Delimiter ";"
-foreach ($dAdmin in $DesktopAdminsCsv) {
-    $FirstName = $User.FirstName
-    $LastName = $User.LastName
-    $Username = $User.Username
-    $Email = $User.Email
-    $JobTitle = $User.JobTitle
+foreach ($DesktopAdmin in $DesktopAdminsCsv) {
+    $FirstName = $DesktopAdmin.FirstName
+    $LastName = $DesktopAdmin.LastName
+    $Username = $DesktopAdmin.Username
+    $Email = $DesktopAdmin.Email
+    $JobTitle = $DesktopAdmin.JobTitle
     # Make sure that the user doesn't already exist
     if (Get-ADUser -Filter { SamAccountName -eq $Username }) {
         Write-Warning "User $Username already exists"
@@ -73,9 +73,8 @@ foreach ($dAdmin in $DesktopAdminsCsv) {
             -EmailAddress $Email `
             -Title $JobTitle `
             -AccountPassword (ConvertTo-secureString $TempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
-            -MemberOf "Administrators" `
             -LogonWorkstations "$DevStationHostname"
-            
+        # TODO - give admin rights on $DevStationHostname to DesktopAdmins.
         Write-Host "Created user $Username"
     }
     }

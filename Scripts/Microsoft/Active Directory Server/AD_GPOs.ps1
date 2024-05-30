@@ -10,8 +10,6 @@ Move-Item -Path ".\policies\windows\*" -Destination "C:\Windows\PolicyDefinition
 Move-Item -Path ".\policies\windows\en-US\*" -Destination "C:\Windows\PolicyDefinitions\en-US" -Recurse
 rm ".\policies\" -r -force
 rm ".\policy_templates.zip" -force
-
-# Firefox ADMX templates are installed on development workstation in the Dev_Toolkit script
  
 # Import GPO Backups
 $GPOLocation = "C:\Users\Administrator\Project Files\Group Policy\GPO"
