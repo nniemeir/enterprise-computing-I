@@ -39,6 +39,8 @@ $EFIEnabled = $args[8]
 VBoxManage createvm --name "$VMName" --ostype "$OSType" --register --basefolder "$VMPath" 
 VBoxManage modifyvm "$VMName" --memory "$MemorySize" --vram 128
 VBoxManage modifyvm "$VMName" --graphicscontroller $GraphicsController
+VBoxManage modifyvm "$VMName" --audio-enabled off
+
 if ( $IsFirewall -eq $true) {
 VBoxManage modifyvm "$VMName" --nic1 nat 
 VBoxManage modifyvm "$VMName" --nic2 intnet 

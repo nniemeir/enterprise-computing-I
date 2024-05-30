@@ -39,6 +39,8 @@ local efi_enabled="$9"
 VBoxManage createvm --name "$vm_name" --ostype "$os_type" --register --basefolder "$vm_path" 
 VBoxManage modifyvm "$vm_name" --memory "$memory_size" --vram 128
 VBoxManage modifyvm "$vm_name" --graphicscontroller "$graphics_controller"
+VBoxManage modifyvm "$vm_name" --audio-enabled off
+
 if [ "$is_firewall" = true ] ; then
 VBoxManage modifyvm "$vm_name" --nic1 nat 
 VBoxManage modifyvm "$vm_name" --nic2 intnet 
