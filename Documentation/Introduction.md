@@ -44,6 +44,8 @@ The project was done in six stages:
 6. Reporting & Demonstration - project documentation was completed and advisor was given remote access to the virtual machines.
 
 ## Rationale
+* Oracle VirtualBox was chosen as the hypervisor due to its popularity, though early testing showed that QEMU may have yielded better performance at the cost of reduced usability.
+
 * pfSense was chosen as the network-based firewall for both subnets due to it being the most popular FOSS firewall
 
 * Fedora Linux was used due to it being upstream of Red Hat Enterprise Linux, which made it a prime candidate for exploring enterprise software without investing in licenses. As with RHEL, Fedora ships the Mandatory Access Control security architecture SELinux preconfigured.
