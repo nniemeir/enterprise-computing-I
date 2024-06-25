@@ -1,7 +1,7 @@
 ## Preface
 This repository contains a revised version of an academic project done by myself in 2022. The goal of the project was to develop a greater understanding of how network/system administration is done on small domains and what similarities and differences exist between how enterprise networks built around the Microsoft and Red Hat ecosystems are managed.
 
-The project was done in six stages:
+The project was completed in six stages:
 
 1. Creation - Virtual machines were created representing two networks.
 
@@ -37,7 +37,7 @@ The project was done in six stages:
 
 3. Hardening - Ensured that none of the virtual machines had been compromised during initial setup, then took basic hardening measures based on recommendations from the software vendors and the third edition of Chuck Easttom's book *Network Defence and Countermeasures*. Due to the extensive hardening advice from the software vendors alone and the limited time alotted to the project, there are many areas where security could be further improved.
 
-4. Testing - The success of the deployment was tested using the criteria defined [here](Testing.md). Next, Nessus was ran and problematic configurations were changed based on the results. Lastly, testing was done again to ensure that changes did not break anything. 
+4. Testing - The success of the deployment was tested using the criteria defined [here](Testing.md). Next, Nessus was ran and problematic configurations were changed based on the results. Lastly, tests were done again to ensure that changes did not break any core functionality.
 
 5. Reproducibility - Deployment scripts were written and steps that were not feasible to automate were documented.
 
