@@ -1,7 +1,7 @@
 ## Preface
 This repository contains a revised version of an academic project done by myself in 2022. The goal of the project was to develop a greater understanding of how network/system administration is done on small domains and what similarities and differences exist between how enterprise networks built around the Microsoft and Red Hat ecosystems are managed.
 
-The project was completed in six stages:
+The project was done in six stages:
 
 1. Creation - Virtual machines were created representing two networks.
 
@@ -37,15 +37,13 @@ The project was completed in six stages:
 
 3. Hardening - Ensured that none of the virtual machines had been compromised during initial setup, then took basic hardening measures based on recommendations from the software vendors and the third edition of Chuck Easttom's book *Network Defence and Countermeasures*. Due to the extensive hardening advice from the software vendors alone and the limited time alotted to the project, there are many areas where security could be further improved.
 
-4. Testing - The success of the deployment was tested using the criteria defined [here](Testing.md). Next, Nessus was ran and problematic configurations were changed based on the results. Lastly, tests were done again to ensure that changes did not break any core functionality.
+4. Testing - The success of the deployment was tested using the criteria defined [here](Testing.md). Next, Nessus was ran and problematic configurations were changed based on the results. Lastly, testing was done again to ensure that changes did not break anything. 
 
 5. Reproducibility - Deployment scripts were written and steps that were not feasible to automate were documented.
 
 6. Reporting & Demonstration - project documentation was completed and advisor was given remote access to the virtual machines.
 
 ## Rationale
-* Oracle VirtualBox was chosen as the hypervisor due to its popularity, though early testing showed that QEMU may have yielded better performance at the cost of reduced usability.
-
 * pfSense was chosen as the network-based firewall for both subnets due to it being the most popular FOSS firewall
 
 * Fedora Linux was used due to it being upstream of Red Hat Enterprise Linux, which made it a prime candidate for exploring enterprise software without investing in licenses. As with RHEL, Fedora ships the Mandatory Access Control security architecture SELinux preconfigured.
