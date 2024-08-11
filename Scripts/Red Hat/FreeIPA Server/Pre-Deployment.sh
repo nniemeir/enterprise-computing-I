@@ -33,6 +33,9 @@ sudo systemctl disable cockpit.socket
 # Install GNOME 
 sudo dnf groupinstall gnome -y
 
+# Install Chromium to allow web UI access
+sudo dnf install chromium -y
+
 # Install pip
 sudo dnf install python3-pip -y
 

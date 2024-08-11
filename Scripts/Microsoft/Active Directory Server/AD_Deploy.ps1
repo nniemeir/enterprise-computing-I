@@ -5,14 +5,11 @@
 New-NetIPAddress `
     -InterfaceAlias "Ethernet" `
     -IPAddress $ServerIP `
-    -PrefixLength 24 `
+    -PrefixLength 28 `
     -DefaultGateway $PfSenseIP
 
 # Set DNS server to Cloudflare
 Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses $CloudflareIP
-
-# Set hostname
-Rename-Computer -NewName "$ServerHostname" -Force -PassThru
 
 # Apply network configuration changes
 Restart-NetAdapter -Name "Ethernet"

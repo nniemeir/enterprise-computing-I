@@ -17,7 +17,7 @@
 
 - name: Block web UI access from other devices
   firewalld:
-    rich_rule: rule family='ipv4' source address='172.16.16.0/16' service name=https drop
+    rich_rule: rule family='ipv4' source address='172.16.16.0/28' service name=https drop
     zone: internal
     permanent: true
     immediate: true

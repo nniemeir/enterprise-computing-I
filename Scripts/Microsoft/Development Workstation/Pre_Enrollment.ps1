@@ -4,7 +4,7 @@
 New-NetIPAddress `
     -InterfaceAlias "Ethernet" `
     -IPAddress $DevStationIP `
-    -PrefixLength 24 `
+    -PrefixLength 28 `
     -DefaultGateway $PfSenseIP
 
 # Set DNS
