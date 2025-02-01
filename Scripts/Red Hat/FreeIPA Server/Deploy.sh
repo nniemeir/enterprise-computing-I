@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Ensure configuration file is present
 source ../preferences.conf || {
 	echo "Error: No configuration file found."
