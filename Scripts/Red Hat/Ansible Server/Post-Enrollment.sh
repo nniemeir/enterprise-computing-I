@@ -7,5 +7,4 @@ python3 -m pip install --user ansible-core
 ansible-galaxy collection install ansible.posix
 
 # Generate an SSH key pair
-ssh-keygen -b 4096 -t rsa 
-
+ssh-keygen -b 4096 -t rsa

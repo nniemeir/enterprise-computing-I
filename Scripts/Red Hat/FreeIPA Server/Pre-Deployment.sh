@@ -6,6 +6,11 @@ main() {
 		exit 1
 	}
 
+	source ../shared_functions.sh || {
+		echo "Error: shared_functions.sh not found."
+		exit 1
+	}
+
 	set_network_parameters
 	disable_unneeded_services
 	install_dependencies
@@ -40,7 +45,7 @@ set_network_parameters() {
 	sudo systemctl restart NetworkManager
 }
 
-disable_unneeded_services() {
+disable_web_ui() {
 	# Disable Cockpit
 	sudo systemctl disable cockpit.socket
 }
