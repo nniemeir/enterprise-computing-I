@@ -7,6 +7,8 @@ main() {
         exit 1
     }
 
+    verify_sourced_vars
+
     source ../shared_functions.sh || {
         echo "Error: shared_functions.sh not found."
         exit 1
@@ -90,15 +92,15 @@ add_users_from_csvs() {
     # Create users and add them to appropriate groups
     while IFS=";" read -r first last username title; do
         # Remove trailing whitespace characters
-        title=${title%$'\r'}
-        title=${title%%$'\n'}
+        local title=${title%$'\r'}
+        local title=${title%%$'\n'}
 
         # Add user based on values in CSV file
         ipa user-add "$username" --cn="$first $last" --first="$first" --last="$last" --title="$title"
 
         # Generate a secure temporary password for the user
         echo "$username" >Temporary/"$first $last".txt
-        temp_pass=$(tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' </dev/urandom | head -c 16)
+        local temp_pass=$(tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' </dev/urandom | head -c 16)
         ipa user-mod "$username" --setattr userpassword="$temp_pass"
         echo "$temp_pass" >>Temporary/"$first $last".txt
 
@@ -112,15 +114,15 @@ add_users_from_csvs() {
 
     while IFS=";" read -r username first last title; do
         # Remove trailing whitespace characters
-        title=${title%$'\r'}
-        title=${title%%$'\n'}
+        local title=${title%$'\r'}
+        local title=${title%%$'\n'}
 
         # Add user based on values in CSV file
         ipa user-add "$username" --cn="$first $last" --first="$first" --last="$last" --title="$title"
 
         # Generate a secure temporary password for the user
         echo "$username" >Temporary/"$first $last".txt
-        temp_pass=$(tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' </dev/urandom | head -c 16)
+        local temp_pass=$(tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' </dev/urandom | head -c 16)
         ipa user-mod "$username" --setattr userpassword="$temp_pass"
         echo "$temp_pass" >>Temporary/"$first $last".txt
 

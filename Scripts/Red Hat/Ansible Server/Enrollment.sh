@@ -7,6 +7,8 @@ main() {
 		exit 1
 	}
 
+	verify_sourced_vars
+
 	source ../shared_functions.sh || {
 		echo "Error: shared_functions.sh not found."
 		exit 1
@@ -55,17 +57,12 @@ configure_network_parameters() {
 	echo "$FREEIPA_IP    $FREEIPA_HOSTNAME" | sudo tee -a /etc/hosts
 }
 
-disable_web_ui() {
-	# Disable Cockpit
-	sudo systemctl disable cockpit.socket
-}
-
 install_dependencies() {
 	# Install pip
-	sudo dnf install python3-pip -y
+	install_pkg python3-pip -y
 
 	# Install FreeIPA-client
-	sudo dnf install freeipa-client -y
+	install_pkg freeipa-client -y
 }
 
 configure_firewall() {
@@ -86,7 +83,16 @@ set_dns_to_ipa() {
 
 enroll_ipa_client() {
 	# Enroll FreeIPA client
-	sudo ipa-client-install --domain="$DOMAIN" --hostname="$ANSIBLE_HOSTNAME" --mkhomedir --no-ntp --principal=admin --realm="$REALM" --server="$FREEIPA_HOSTNAME" --password="$ipa_admin_pass" --unattended
+	sudo ipa-client-install \
+		--domain="$DOMAIN" \
+		--hostname="$ANSIBLE_HOSTNAME" \
+		--mkhomedir \
+		--no-ntp \
+		--principal=admin \
+		--realm="$REALM" \
+		--server="$FREEIPA_HOSTNAME" \
+		--password="$ipa_admin_pass" \
+		--unattended
 
 	#Procure Kerberos Ticket
 	kinit "$ENROLL_USER"

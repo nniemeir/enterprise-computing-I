@@ -7,6 +7,8 @@ main() {
 		exit 1
 	}
 
+	verify_sourced_vars
+
 	source ../shared_functions.sh || {
 		echo "Error: shared_functions.sh not found."
 		exit 1
@@ -55,16 +57,16 @@ configure_network_parameters() {
 
 install_dependencies() {
 	# Install pip
-	sudo dnf install python3-pip -y
+	install_pkg python3-pip -y
 
 	# Install OpenSSH Server
-	sudo dnf install openssh-server -y
+	install_pkg openssh-server -y
 
 	# Enable SSHD service
 	sudo systemctl enable sshd.service
 
 	# Install FreeIPA-client
-	sudo dnf install freeipa-client
+	install_pkg freeipa-client
 }
 
 configure_firewall() {

@@ -6,6 +6,8 @@ main() {
 		exit 1
 	}
 
+	verify_sourced_vars
+
 	source ../shared_functions.sh || {
 		echo "Error: shared_functions.sh not found."
 		exit 1
@@ -45,20 +47,15 @@ set_network_parameters() {
 	sudo systemctl restart NetworkManager
 }
 
-disable_web_ui() {
-	# Disable Cockpit
-	sudo systemctl disable cockpit.socket
-}
-
 install_dependencies() {
 	# Install GNOME
 	sudo dnf groupinstall gnome -y
 
 	# Install Chromium to allow web UI access
-	sudo dnf install chromium -y
+	install_pkg chromium
 
 	# Install pip
-	sudo dnf install python3-pip -y
+	install_pkg python3-pip -y
 
 	# Install Ansible
 	python3 -m pip install --user ansible-core
@@ -67,7 +64,7 @@ install_dependencies() {
 	ansible-galaxy collection install ansible.posix
 
 	# Install FreeIPA-client
-	sudo dnf install freeipa-server freeipa-server-dns -y
+	install_pkg freeipa-server freeipa-server-dns -y
 }
 
 configure_firewalld() {
