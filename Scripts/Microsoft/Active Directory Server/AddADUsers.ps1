@@ -78,4 +78,5 @@ foreach ($DesktopAdmin in $DesktopAdminsCsv) {
         Write-Host "Created user $Username"
     }
     }
+
 Read-Host "Press Enter to exit"

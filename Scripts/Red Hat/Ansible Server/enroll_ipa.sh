@@ -16,6 +16,9 @@ main() {
 
 	ipa_admin_pass=$(take_input_and_confirm "IPA admin password")
 
+	# Generate an SSH key pair
+	ssh-keygen -b 4096 -t rsa
+
 	configure_network_parameters
 
 	disable_web_ui
@@ -63,6 +66,12 @@ install_dependencies() {
 
 	# Install FreeIPA-client
 	install_pkg freeipa-client -y
+
+	# Install Ansible
+	python3 -m pip install --user ansible-core
+
+	# Install Ansible's POSIX collection
+	ansible-galaxy collection install ansible.posix
 }
 
 configure_firewall() {
