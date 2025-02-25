@@ -1,29 +1,35 @@
 #!/bin/bash
 
 main() {
+	local vm_parent_path
 	read -p "Enter desired VM parent directory (leave empty for home directory): " vm_parent_path
-	validate_vm_parent_dir
+	local vm_path
+	vm_path=validate_vm_parent_dir "$vm_parent_path"
+
 	# pfSense does not support Secure Boot as of writing
-	setup_vm "RH_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 true "linux" false
-	setup_vm "RH_freeIPA" "Fedora_64" 2 "VMSVGA" 8192 64000 false "linux" true
-	setup_vm "RH_Ansible" "Fedora_64" 2 "VMSVGA" 2048 64000 false "linux" true
-	setup_vm "RH_DevStation" "Fedora_64" 2 "VMSVGA" 4096 64000 false "linux" true
-	setup_vm "MS_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 true "windows" false
-	setup_vm "MS_AD_Server" "Windows2022_64" 2 "VBoxSVGA" 8192 100000 true "windows" true
-	setup_vm "MS_DevStation" "Windows11_64" 2 "VBoxSVGA" 8192 80000 true "windows" true
+	new_vm "$vm_path" "RH_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 true "linux" false
+	new_vm "$vm_path" "RH_freeIPA" "Fedora_64" 2 "VMSVGA" 8192 64000 false "linux" true
+	new_vm "$vm_path" "RH_Ansible" "Fedora_64" 2 "VMSVGA" 2048 64000 false "linux" true
+	new_vm "$vm_path" "RH_DevStation" "Fedora_64" 2 "VMSVGA" 4096 64000 false "linux" true
+	new_vm "$vm_path" "MS_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 true "windows" false
+	new_vm "$vm_path" "MS_AD_Server" "Windows2022_64" 2 "VBoxSVGA" 8192 100000 true "windows" true
+	new_vm "$vm_path" "MS_DevStation" "Windows11_64" 2 "VBoxSVGA" 8192 80000 true "windows" true
 }
 
 validate_vm_parent_dir() {
+	local vm_parent_path
+	vm_parent_path="$1"
+
 	if [[ -z "$vm_parent_path" ]]; then
 		vm_parent_path="$HOME"
 	fi
 
-	# Remove trailing forward slash if present
+	# Remove trailing forward slash on path if present
 	if [ "${vm_parent_path: -1}" == "/" ]; then
 		vm_parent_path="${vm_parent_path%/*}"
 	fi
 
-	vm_path="$vm_parent_path/Enterprise Computing I VMs"
+	local vm_path="$vm_parent_path/Enterprise Computing I VMs"
 
 	# Ensure parent directory is writeable before proceeding
 	if [ ! -w "$vm_parent_path" ]; then
@@ -36,18 +42,21 @@ validate_vm_parent_dir() {
 		echo "A deployment already exists in this location"
 		exit 1
 	fi
+	
+	echo "$vm_path"
 }
 
-create_and_configure_vm() {
-	local vm_name="$1"
-	local os_type="$2"
-	local cpus="$3"
-	local graphics_controller="$4"
-	local memory_size="$5"
-	local storage_size="$6"
-	local is_firewall="$7"
-	local internal_network="$8"
-	local efi_enabled="$9"
+new_vm() {
+	local vm_path="$1"
+	local vm_name="$2"
+	local os_type="$3"
+	local cpus="$4"
+	local graphics_controller="$5"
+	local memory_size="$6"
+	local storage_size="$7"
+	local is_firewall="$8"
+	local internal_network="$9"
+	local efi_enabled="$10"
 
 	VBoxManage createvm --name "$vm_name" --ostype "$os_type" --register --basefolder "$vm_path"
 	VBoxManage modifyvm "$vm_name" --memory "$memory_size" --vram 128
