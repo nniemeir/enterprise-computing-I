@@ -1,21 +1,28 @@
 . .\..\preferences.ps1
 
-if(!(Test-Path -Path ".\Reports")) {
-New-Item -Path ".\Reports" -ItemType directory 
+function Main {
+    if(!(Test-Path -Path ".\Reports")) {
+        New-Item -Path ".\Reports" -ItemType directory 
+    }
+
+    Add-UsersFromCSV ".\Records\developers.csv"
+    Add-UsersFromCSV ".\Records\admins.csv"
+    Read-Host "Press Enter to exit"
 }
 
-$UserCsv = Import-Csv ".\Records\Users_Developers.csv" -Delimiter ";"
-foreach ($User in $UserCsv) {
-    $FirstName = $User.FirstName
-    $LastName = $User.LastName
-    $Username = $User.Username
-    $Email = $User.Email
-    $JobTitle = $User.JobTitle
-    # Make sure that the user doesn't already exist
-    if (Get-ADUser -Filter { SamAccountName -eq $Username }) {
-        Write-Warning "User $Username already exists"
-    }
-    else {
+function Add-UsersFromCSV {
+    $UserCsv = Import-Csv "$args[0]" -Delimiter ";"
+    foreach ($User in $UserCsv) {
+        $FirstName = $User.FirstName
+        $LastName = $User.LastName
+        $Username = $User.Username
+        $Email = $User.Email
+        $JobTitle = $User.JobTitle
+        # Make sure that the user doesn't already exist
+        if (Get-ADUser -Filter { SamAccountName -eq $Username }) {
+            Write-Warning "User $Username already exists"
+            return
+        }
         # Generate a temporary password for the user
         Add-Type -AssemblyName 'System.Web'
         $Length = Get-Random -Minimum 12 -Maximum 20
@@ -36,47 +43,8 @@ foreach ($User in $UserCsv) {
             -Title $JobTitle `
             -AccountPassword (ConvertTo-secureString $TempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
             -LogonWorkstations "$DevStationHostname"
-
-            
         Write-Host "Created user $Username"
     }
 }
 
-$DesktopAdminsCsv = Import-Csv ".\Records\Users_Desktop_Admins.csv" -Delimiter ";"
-foreach ($DesktopAdmin in $DesktopAdminsCsv) {
-    $FirstName = $DesktopAdmin.FirstName
-    $LastName = $DesktopAdmin.LastName
-    $Username = $DesktopAdmin.Username
-    $Email = $DesktopAdmin.Email
-    $JobTitle = $DesktopAdmin.JobTitle
-    # Make sure that the user doesn't already exist
-    if (Get-ADUser -Filter { SamAccountName -eq $Username }) {
-        Write-Warning "User $Username already exists"
-    }
-    else {
-        # Generate a temporary password for the user
-        Add-Type -AssemblyName 'System.Web'
-        $Length = Get-Random -Minimum 12 -Maximum 20
-        $MaxNonAlphanum = $Length - 4
-        $NonAlphaNum = Get-Random -Minimum 5 -Maximum $MaxNonAlphanum
-        $TempPassword=[System.Web.Security.Membership]::GeneratePassword($Length,$NonAlphaNum)
-        # The user's temporary password is written to a text file, this would be printed and given to them
-        "$TempPassword" | Out-File -FilePath ".\Reports\$Username Temporary.txt"
-        New-ADUser `
-            -SamAccountName $Username `
-            -UserPrincipalName "$Username@$Domain" `
-            -Name "$FirstName $LastName" `
-            -GivenName $FirstName `
-            -Surname $LastName `
-            -Enabled $True `
-            -DisplayName "$LastName, $FirstName" `
-            -EmailAddress $Email `
-            -Title $JobTitle `
-            -AccountPassword (ConvertTo-secureString $TempPassword -AsPlainText -Force) -ChangePasswordAtLogon $True `
-            -LogonWorkstations "$DevStationHostname"
-        # TODO - give admin rights on $DevStationHostname to DesktopAdmins.
-        Write-Host "Created user $Username"
-    }
-    }
-
-Read-Host "Press Enter to exit"
+Main

@@ -1,18 +1,18 @@
-function main {
+function Main {
 	$VMParentPath = Read-Host "Enter desired VM parent directory (leave empty for home directory): "
-	$VMPath=ValidateVMParentDir $VMParentPath
+	$VMPath=TestVMParentDir $VMParentPath
 
 	# pfSense does not support Secure Boot as of writing
-	New-VM $VMPath "RH_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 $true "linux" $false
-	New-VM $VMPath "RH_freeIPA" "Fedora_64" 2 "VMSVGA" 8192 64000 $false "linux" $true 
-	New-VM $VMPath "RH_Ansible" "Fedora_64" 2 "VMSVGA" 2048 64000 $false "linux" $true
-	New-VM $VMPath "RH_DevStation" "Fedora_64" 2 "VMSVGA" 4096 64000 $false "linux" $true
-	New-VM $VMPath "MS_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 $true "windows" $false
-	New-VM $VMPath "MS_AD_Server" "Windows2022_64" 2 "VBoxSVGA" 8192 100000 $true "windows" $true
-	New-VM $VMPath "MS_DevStation" "Windows11_64" 2 "VBoxSVGA" 8192 80000 $true "windows" $true
+	NewVM $VMPath "RH_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 $true "linux" $false
+	NewVM $VMPath "RH_freeIPA" "Fedora_64" 2 "VMSVGA" 8192 64000 $false "linux" $true 
+	NewVM $VMPath "RH_Ansible" "Fedora_64" 2 "VMSVGA" 2048 64000 $false "linux" $true
+	NewVM $VMPath "RH_DevStation" "Fedora_64" 2 "VMSVGA" 4096 64000 $false "linux" $true
+	NewVM $VMPath "MS_pfSense" "FreeBSD_64" 2 "VMSVGA" 4096 64000 $true "windows" $false
+	NewVM $VMPath "MS_AD_Server" "Windows2022_64" 2 "VBoxSVGA" 8192 100000 $true "windows" $true
+	NewVM $VMPath "MS_DevStation" "Windows11_64" 2 "VBoxSVGA" 8192 80000 $true "windows" $true
 }
 
-function ValidateVMParentDir {
+function Test-VMParentDir {
 	$VMParentPath = $args[0]
 
 	if (-not($VMParentPath)) {
@@ -81,4 +81,4 @@ function New-VM {
 	VBoxManage storageattach "$VMName" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  $VMPath\$VMName\$VMName.vdi 
 }
 
-main
+Main
