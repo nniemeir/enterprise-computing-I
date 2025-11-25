@@ -1,0 +1,126 @@
+- name: Install Security Updates
+  dnf:
+    state: latest
+    name: "*"        
+    security: yes
+
+- name: Ensure firewalld is installed
+  dnf:
+    name: firewalld
+    state: present
+
+- name: Ensure firewalld service enabled and running
+  systemd:
+    enabled: true
+    state: started
+    name: firewalld
+
+- name: Reload firewalld
+  service:
+    name: firewalld
+    state: reloaded
+
+- name: Ensure SELinux enabled and enforcing
+  ansible.posix.selinux:
+    policy: targeted
+    state: enforcing
+  
+- name: Install fail2ban
+  dnf:
+     state: present
+     name:
+        - fail2ban
+
+- name: Enable and start fail2ban service
+  systemd:
+    enabled: true
+    state: started
+    name: fail2ban
+
+- name: copy fail2ban local config
+  copy: 
+    src=jail.local 
+    dest=/etc/fail2ban/jail.local 
+    owner=root 
+    group=root 
+    mode=0644
+
+- name: Copy SSHD filter
+  copy: 
+    src=sshd.local 
+    dest=/etc/fail2ban/jail.d/sshd.local 
+    owner=root 
+    group=root 
+    mode=0644
+
+- name: Reload fail2ban service
+  systemd:
+    enabled: true
+    state: restarted
+    name: fail2ban
+
+- name: Ensure audit package is installed
+  ansible.builtin.dnf:
+    name: audit
+    state: present
+
+- name: Ensure auditd service is up and running
+  ansible.builtin.service:
+    name: auditd
+    state: started
+    enabled: yes
+
+- name: Push Audit rules
+  ansible.builtin.copy:
+    src: audit.rules
+    dest: /etc/audit/rules.d/audit.rules
+    owner: root
+    group: root
+    mode: 0600
+
+#- name: Load Audit rules
+#  shell: |
+#    augenrules --check
+#    augenrules --load
+
+- name: Harden network parameters
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    sysctl_file: /etc/sysctl.d/90-net.conf
+  loop:
+   - name: net.ipv4.tcp_syncookies
+     value: 1
+   - name: net.ipv4.conf.default.log_martians
+     value: 1
+   - name: net.ipv4.conf.all.log_martians
+     value: 1
+   - name: net.ipv4.conf.all.accept_source_route
+     value: 0
+   - name: net.ipv4.conf.default.accept_source_route
+     value: 0
+   - name: net.ipv6.conf.all.accept_source_route
+     value: 0
+   - name: net.ipv6.conf.default.accept_source_route
+     value: 0
+
+- name: Harden kernel parameters
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    sysctl_file: /etc/sysctl.d/90-kernel.conf
+  loop:
+  - name: kernel.randomize_va_space
+    value: 2
+  - name: kernel.dmesg_restrict
+    value: 1
+  - name: kernel.perf_event_paranoid
+    value: 2
+
+
